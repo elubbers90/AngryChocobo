@@ -7,7 +7,8 @@ using Random = UnityEngine.Random;
 public class LevelManager : MonoBehaviour {
     public GameObject[] enemyReferences;
 
-    private Transform levelHolder;
+    [HideInInspector]
+    public Transform levelHolder;
 
     private Vector3 world;
 
@@ -59,7 +60,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public bool CheckVictory() {
-        return enemyAmount <= 0 && levelHolder.childCount == 0;
+        return enemyAmount <= 0 && (!enabled || levelHolder.childCount == 0);
     }
 
     public void RemoveManager() {

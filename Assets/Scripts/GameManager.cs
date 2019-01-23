@@ -6,15 +6,18 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
+    [HideInInspector]
     public LevelManager levelManager;
+    [HideInInspector]
+    public UIManager uiManager;
     public GameObject playerReference;
     public GameObject cakeReference;
 
-    [HideInInspector]
-    public int level = 1;
     private int lives = 3;
     private GameObject player;
     private List<GameObject> cakes;
+    [HideInInspector]
+    public int level;
 
     void Awake() {
         if (instance == null) {
@@ -27,26 +30,14 @@ public class GameManager : MonoBehaviour
 
         cakes = new List<GameObject>();
         levelManager = GetComponent<LevelManager>();
-        InitGame();
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+
+        StartCoroutine(WaitAndInit());
     }
 
-    //this is called only once, and the paramter tell it to be called only after the scene was loaded
-    //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static public void CallbackInitialization() {
-        //register the callback to be called everytime the scene is loaded
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
 
-    //This is called each time a scene is loaded.
-    static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) {
-        instance.InitGame();
-    }
 
-    private void Update() {
-    }
-
-    void InitGame() {
+    public void InitGame() {
         lives = 3;
         cakes.Add(Instantiate(cakeReference, new Vector3(-10f, 0f, 0f), Quaternion.identity) as GameObject);
         cakes.Add(Instantiate(cakeReference, new Vector3(-10f, -2f, 0f), Quaternion.identity) as GameObject);
@@ -69,6 +60,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitAndInit() {
         float waitTime = 2f;
         yield return new WaitForSeconds(waitTime);
+        level = SaveSystem.GetInt("level", 1);
         InitGame();
     }
 
@@ -78,7 +70,9 @@ public class GameManager : MonoBehaviour
         if (levelManager.CheckVictory()) {
             ClearLevel();
             level++;
-            StartCoroutine(WaitAndInit());
+            SaveSystem.SetInt("level", level);
+            SaveSystem.SaveToDisk();
+            uiManager.ShowVictory();
         }
     }
 
@@ -88,6 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver() {
         ClearLevel();
+        uiManager.ShowGameOver();
     }
 
     private void ClearLevel() {
