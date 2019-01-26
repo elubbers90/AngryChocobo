@@ -24,8 +24,6 @@ public class Egg : MovingObject {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.collider.tag == "Enemy") {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

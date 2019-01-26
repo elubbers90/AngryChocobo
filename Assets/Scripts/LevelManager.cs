@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour {
             GameObject toInstantiate = enemies[Random.Range(0, enemies.Count)];
 
             float x = world.x + 1f;
-            float y = Random.Range((0 - world.y + 1f), (world.y - 1f));
+            float y = Random.Range((0 - world.y + 2f), (world.y - 2f));
 
             GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 

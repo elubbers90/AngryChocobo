@@ -13,9 +13,6 @@ public class Enemy : MovingObject {
 
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
-        Vector3 scale = transform.localScale;
-        size.x = size.x * scale.x * 1.5f;
-        size.y = size.y * scale.y * 1.5f;
         base.Start();
         speed = Random.Range(minSpeed, maxSpeed);
         SetVelocity();
