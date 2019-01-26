@@ -64,7 +64,6 @@
     <Compile Include="Assets\SaveGame\Scripts\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\SaveGame\Scripts\SaveSystem\SaveSystemData.cs" />
     <Compile Include="Assets\SaveGame\Scripts\SaveSystemSetup.cs" />
-    <Compile Include="Assets\SaveGame\Scripts\TestSaveGame.cs" />
     <Compile Include="Assets\Scripts\Egg.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

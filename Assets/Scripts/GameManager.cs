@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private int lives = 3;
     private GameObject player;
+    private Player playerScript;
     private List<GameObject> cakes;
     [HideInInspector]
     public int level;
@@ -35,7 +36,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitAndInit());
     }
 
-
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.RightControl)) {
+            level = 1;
+            SaveSystem.SetInt("level", level);
+        }
+    }
 
     public void InitGame() {
         lives = 3;
@@ -44,6 +50,9 @@ public class GameManager : MonoBehaviour
         cakes.Add(Instantiate(cakeReference, new Vector3(-10f, 2f, 0f), Quaternion.identity) as GameObject);
         levelManager.SetupLevel(level);
         player = Instantiate(playerReference, new Vector3(-8.75f, 0f, 0f), Quaternion.identity) as GameObject;
+        playerScript = player.GetComponent<Player>();
+        uiManager.ShowEggType(playerScript.selectedEggType);
+        uiManager.ToggleEggSwitcher(true);
     }
 
     public void EnemyHit() {
@@ -57,11 +66,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SwitchEggType() {
+        playerScript.SwitchEggType();
+
+    }
+
     private IEnumerator WaitAndInit() {
         float waitTime = 2f;
         yield return new WaitForSeconds(waitTime);
         level = SaveSystem.GetInt("level", 1);
-        InitGame();
+        uiManager.ToggleMainMenu(true);
     }
 
     private IEnumerator WaitAndCheck() {
@@ -72,7 +86,7 @@ public class GameManager : MonoBehaviour
             level++;
             SaveSystem.SetInt("level", level);
             SaveSystem.SaveToDisk();
-            uiManager.ShowVictory();
+            uiManager.ToggleVictory(true);
         }
     }
 
@@ -82,7 +96,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver() {
         ClearLevel();
-        uiManager.ShowGameOver();
+        uiManager.ToggleGameOver(true);
     }
 
     private void ClearLevel() {
@@ -94,5 +108,6 @@ public class GameManager : MonoBehaviour
             Destroy(cakes[i]);
         }
         cakes.Clear();
+        uiManager.ToggleEggSwitcher(false);
     }
 }

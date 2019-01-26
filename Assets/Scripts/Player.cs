@@ -8,10 +8,11 @@ using UnityEditor;
 public class Player : MovingObject
 {
     public GameObject[] eggTypes;
-
-    private int selectedEggType = 0;
+    
+    public int selectedEggType = 0;
 
     protected override void Start() {
+        size = GetComponent<Renderer>().bounds.size;
         base.Start();
         StartCoroutine(WaitAndSpawn());
     }
@@ -49,8 +50,13 @@ public class Player : MovingObject
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.LeftControl)) {
-            selectedEggType = 1 - selectedEggType;
+            SwitchEggType();
         }
+    }
+
+    public void SwitchEggType() {
+        selectedEggType = 1 - selectedEggType;
+        GameManager.instance.uiManager.ShowEggType(selectedEggType);
     }
 
     private IEnumerator WaitAndSpawn() {

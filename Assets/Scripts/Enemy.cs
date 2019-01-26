@@ -9,13 +9,23 @@ public class Enemy : MovingObject {
 
     private int currentHp;
     private float speed;
+    private Animator animator;
 
     protected override void Start() {
+        size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
+        Vector3 scale = transform.localScale;
+        size.x = size.x * scale.x * 1.5f;
+        size.y = size.y * scale.y * 1.5f;
         base.Start();
         speed = Random.Range(minSpeed, maxSpeed);
-        rb2D.velocity = transform.TransformDirection(Vector3.left * speed);
+        SetVelocity();
+        currentHp = baseHp * (int) Mathf.Ceil(GameManager.instance.level / 2f);
 
-        currentHp = baseHp * (int) Mathf.Ceil(GameManager.instance.level / 2);
+        animator = GetComponent<Animator>();
+    }
+
+    private void SetVelocity() {
+        rb2D.velocity = transform.TransformDirection(Vector3.left * speed);
     }
 
     private void Update() {
@@ -25,12 +35,35 @@ public class Enemy : MovingObject {
         }
     }
 
+    private IEnumerator WaitandMove() {
+        int hpAtHit = currentHp;
+        float waitTime = 0.5f;
+        yield return new WaitForSeconds(waitTime);
+        if (currentHp > 0 && currentHp == hpAtHit) {
+            SetVelocity();
+        }
+    }
+
+    private IEnumerator WaitandRemove() {
+        float waitTime = 0.5f;
+        yield return new WaitForSeconds(waitTime);
+        RemoveEnemy();
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Egg") {
+        if (collision.gameObject.tag == "Egg" && currentHp > 0) {
             Egg eggScript = collision.gameObject.GetComponent<Egg>();
             currentHp -= eggScript.currentDamage;
             if(currentHp <= 0) {
-                RemoveEnemy();
+                rb2D.velocity = Vector2.zero;
+                gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
+                gameObject.tag = "DeadEnemy";
+                animator.SetTrigger("Die");
+                StartCoroutine(WaitandRemove());
+            } else {
+                rb2D.velocity = Vector2.zero;
+                animator.SetTrigger("TakeDamage");
+                StartCoroutine(WaitandMove());
             }
         }
     }

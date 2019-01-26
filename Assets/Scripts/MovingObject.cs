@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MovingObject : MonoBehaviour
-{
-    public LayerMask blockingLayer;
-    
+public abstract class MovingObject : MonoBehaviour {
     [HideInInspector]
     public Rigidbody2D rb2D;
 
@@ -15,10 +12,11 @@ public abstract class MovingObject : MonoBehaviour
     public float half_y;
     [HideInInspector]
     public float half_x;
+    [HideInInspector]
+    public Vector3 size;
 
     protected virtual void Start() {
         wrld = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
-        Vector3 size = GetComponent<Renderer>().bounds.size;
         half_y = size.y / 2;
         half_x = size.x / 2;
 
