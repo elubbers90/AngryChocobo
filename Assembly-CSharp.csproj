@@ -65,7 +65,9 @@
     <Compile Include="Assets\SaveGame\Scripts\SaveSystem\SaveSystemData.cs" />
     <Compile Include="Assets\SaveGame\Scripts\SaveSystemSetup.cs" />
     <Compile Include="Assets\Scripts\Egg.cs" />
-    <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\ChargingEnemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\GrazingEnemy.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\Loader.cs" />

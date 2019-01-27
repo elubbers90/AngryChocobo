@@ -7,9 +7,14 @@ public class Enemy : MovingObject {
     public float maxSpeed;
     public int baseHp;
 
-    private int currentHp;
-    private float speed;
-    private Animator animator;
+    [HideInInspector]
+    public int currentHp;
+    [HideInInspector]
+    public float speed;
+    [HideInInspector]
+    public Animator animator;
+    [HideInInspector]
+    public bool forceStopMove = false;
 
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
@@ -21,8 +26,12 @@ public class Enemy : MovingObject {
         animator = GetComponent<Animator>();
     }
 
-    private void SetVelocity() {
-        rb2D.velocity = transform.TransformDirection(Vector3.left * speed);
+    public virtual void SetVelocity() {
+        if (!forceStopMove) {
+            rb2D.velocity = transform.TransformDirection(Vector3.left * speed);
+        } else {
+            rb2D.velocity = Vector2.zero;
+        }
     }
 
     private void Update() {

@@ -41,16 +41,23 @@ public class LevelManager : MonoBehaviour {
 
     public void SetupLevel(int level) {
         enemies = new List<GameObject>();
+        enemyAmount = Random.Range(15, 20);
         
-        int modded = level % 2;
+        int modded = level % 3;
         if (modded == 0) {
-            enemyAmount = 5;
             enemies.Add(enemyReferences[modded]);
+            enemies.Add(enemyReferences[modded+3]);
+            enemies.Add(enemyReferences[modded + 6]);
+            enemies.Add(enemyReferences[modded + 9]);
+        } else if (modded == 1) {
+            enemies.Add(enemyReferences[modded]);
+            enemies.Add(enemyReferences[modded + 3]);
+            enemies.Add(enemyReferences[modded + 6]);
         } else {
-            enemyAmount = 10;
             enemies.Add(enemyReferences[modded]);
+            enemies.Add(enemyReferences[modded + 3]);
+            enemies.Add(enemyReferences[modded + 6]);
         }
-
         enabled = true;
 
         world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
