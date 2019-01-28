@@ -44,12 +44,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void InitGame() {
+        Vector3 world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
         lives = 3;
-        cakes.Add(Instantiate(cakeReference, new Vector3(-10f, 0f, 0f), Quaternion.identity) as GameObject);
-        cakes.Add(Instantiate(cakeReference, new Vector3(-10f, -2f, 0f), Quaternion.identity) as GameObject);
-        cakes.Add(Instantiate(cakeReference, new Vector3(-10f, 2f, 0f), Quaternion.identity) as GameObject);
+        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, 0f, 0f), Quaternion.identity) as GameObject);
+        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, -2f, 0f), Quaternion.identity) as GameObject);
+        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, 2f, 0f), Quaternion.identity) as GameObject);
         levelManager.SetupLevel(level);
-        player = Instantiate(playerReference, new Vector3(-8.75f, 0f, 0f), Quaternion.identity) as GameObject;
+        player = Instantiate(playerReference, new Vector3(3f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
         playerScript = player.GetComponent<Player>();
         uiManager.ShowEggType(playerScript.selectedEggType);
         uiManager.ToggleEggSwitcher(true);
