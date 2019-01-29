@@ -11,9 +11,12 @@ public class GrazingEnemy : Enemy {
     }
 
     private IEnumerator StartRandomGrazeTimer() {
+        int hpAtHit = currentHp;
         float waitTime = Random.Range(minGrazeTime, maxGrazeTime);
         yield return new WaitForSeconds(waitTime);
-        StartCoroutine(WaitGrazeAndMove());
+        if (currentHp > 0 && currentHp == hpAtHit) {
+            StartCoroutine(WaitGrazeAndMove());
+        }
     }
 
     private IEnumerator WaitGrazeAndMove() {

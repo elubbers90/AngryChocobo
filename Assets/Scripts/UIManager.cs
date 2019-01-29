@@ -80,4 +80,10 @@ public class UIManager : MonoBehaviour {
         SaveSystem.SetInt("level", 1);
         currentLevel.GetComponent<Text>().text = "" + GameManager.instance.level;
     }
+
+    public void Cheat() {
+        GameManager.instance.level++;
+        SaveSystem.SetInt("level", GameManager.instance.level);
+        currentLevel.GetComponent<Text>().text = "" + GameManager.instance.level;
+    }
 }

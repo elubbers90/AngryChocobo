@@ -20,7 +20,6 @@ public class ChargingEnemy : Enemy {
     private IEnumerator WaitChargeAndMove() {
         forceStopMove = true;
         rb2D.velocity = Vector2.zero;
-        int hpAtHit = currentHp;
         float waitTime = 1.2f;
         animator.SetTrigger("Charge");
         yield return new WaitForSeconds(waitTime);

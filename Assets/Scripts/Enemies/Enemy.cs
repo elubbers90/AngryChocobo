@@ -19,9 +19,9 @@ public class Enemy : MovingObject {
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
         base.Start();
+        currentHp = baseHp * (int)Mathf.Ceil(GameManager.instance.level / 2f);
         speed = Random.Range(minSpeed, maxSpeed);
         SetVelocity();
-        currentHp = baseHp * (int) Mathf.Ceil(GameManager.instance.level / 2f);
 
         animator = GetComponent<Animator>();
     }

@@ -6,8 +6,16 @@ using Random = UnityEngine.Random;
 using UnityEngine.Tilemaps;
 
 public class LevelManager : MonoBehaviour {
+    public TileBase[] edgeTiles;
+    public TileBase[] topBorderTiles;
+    public TileBase[] topTiles;
     public TileBase[] centerTiles;
+    public TileBase[] foregroundObjects;
+    public TileBase[] treeTiles;
+
     private Tilemap background;
+    private Tilemap foreground;
+    private Tilemap treetops;
     public GameObject[] enemyReferences;
 
     [HideInInspector]
@@ -21,6 +29,8 @@ public class LevelManager : MonoBehaviour {
 
     public void Start() {
         background = GameObject.Find("Background").GetComponent<Tilemap>();
+        foreground = GameObject.Find("Foreground").GetComponent<Tilemap>();
+        treetops = GameObject.Find("TreeTops").GetComponent<Tilemap>();
         world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
     }
 
@@ -53,17 +63,75 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    private void SpawnBackground() {
+    private void SpawnBackground(int level) {
         background.ClearAllTiles();
-        for (int x = (0 - (int)world.x - 1); x <= (0 + (int)world.x); x++){
-            for (int y = (0 - (int)world.y); y <= (0 + (int)world.y); y++) {
-                background.SetTile(new Vector3Int(x, y, 0), centerTiles[Random.Range(0, centerTiles.Length)]);
+        foreground.ClearAllTiles();
+
+        int minBackgroundRange = (((int)Math.Floor((decimal)(level + 5) / 5)) % 4) * 5;
+        Debug.Log("[minBackgroundRange " + minBackgroundRange);
+        int chosenIndex = Random.Range(minBackgroundRange, minBackgroundRange + 5);
+
+        int minForegroundRange = (((int)Math.Floor((decimal)(level + 5) / 5)) % 4) * 10;
+        Debug.Log("[minForegroundRange " + minForegroundRange);
+        int chosenForeground1 = Random.Range(minForegroundRange, minForegroundRange + 10);
+        int chosenForeground2 = Random.Range(minForegroundRange, minForegroundRange + 10);
+        while (chosenForeground2 == chosenForeground1) {
+            chosenForeground2 = Random.Range(minForegroundRange, minForegroundRange + 10);
+        }
+
+        int left = (0 - (int)world.x - 1);
+        int right = (int)world.x;
+        int bottom = (0 - (int)world.y);
+        int top = (int)world.y;
+
+        for (int x = left; x <= right; x++){
+            for (int y = bottom; y <= top; y++) {
+                if (y == top) {
+                    background.SetTile(new Vector3Int(x, y, 0), edgeTiles[chosenIndex]);
+                } else if (y + 1 == top) {
+                    background.SetTile(new Vector3Int(x, y, 0), topBorderTiles[chosenIndex]);
+                } else if (y + 2 == top) {
+                    background.SetTile(new Vector3Int(x, y, 0), topTiles[chosenIndex]);
+                } else {
+                    background.SetTile(new Vector3Int(x, y, 0), centerTiles[chosenIndex]);
+                    if (y != bottom) {
+                        if (Random.Range(0, 100) < 5) {
+                            if (Random.Range(0, 2) == 0) {
+                                foreground.SetTile(new Vector3Int(x, y, 0), foregroundObjects[chosenForeground1]);
+                            } else {
+                                foreground.SetTile(new Vector3Int(x, y, 0), foregroundObjects[chosenForeground2]);
+                            }
+                        }
+                    }
+                }
             }
         }
+
+
+        treetops.SetTile(new Vector3Int(left, bottom, 0), treeTiles[minBackgroundRange]);
+        treetops.SetTile(new Vector3Int(left + 1, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(left + 2, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(left + 3, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(left + 4, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(left + 5, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(left + 6, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(left + 7, bottom, 0), treeTiles[minBackgroundRange + 4]);
+
+        treetops.SetTile(new Vector3Int(0, bottom, 0), treeTiles[minBackgroundRange]);
+        treetops.SetTile(new Vector3Int(1, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(2, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(3, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(4, bottom, 0), treeTiles[minBackgroundRange + 4]);
+
+        treetops.SetTile(new Vector3Int(right - 5, bottom, 0), treeTiles[minBackgroundRange]);
+        treetops.SetTile(new Vector3Int(right - 4, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(right - 3, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(right - 2, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(right - 1, bottom, 0), treeTiles[minBackgroundRange + 4]);
     }
 
     public void SetupLevel(int level) {
-        SpawnBackground();
+        SpawnBackground(level);
 
         enemies = new List<GameObject>();
         enemyAmount = Random.Range(15, 20);
