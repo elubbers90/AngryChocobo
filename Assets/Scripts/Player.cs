@@ -8,13 +8,20 @@ using UnityEditor;
 public class Player : MovingObject
 {
     public GameObject[] eggTypes;
-    
-    public int selectedEggType = 0;
+
+    [HideInInspector]
+    public int selectedEggType = 1;
+    private float currentEggSpeed;
+    [HideInInspector]
+    public Animator animator;
 
     protected override void Start() {
         size = GetComponent<Renderer>().bounds.size;
         base.Start();
-        StartCoroutine(WaitAndSpawn());
+        animator = GetComponent<Animator>();
+
+        SwitchEggType();
+        SpawnEgg();
     }
 
     private void FixedUpdate() {
@@ -36,7 +43,7 @@ public class Player : MovingObject
             Touch myTouch = Input.touches[0];
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(myTouch.position);
             Vector3 end = new Vector3(start.x, worldPos.y, 0);
-            float speed = 0.4f;
+            float speed = 0.2f;
             if (end.y - start.y > speed){
                 end.y = start.y + speed;
             } else if (end.y - start.y < -speed){
@@ -56,11 +63,13 @@ public class Player : MovingObject
 
     public void SwitchEggType() {
         selectedEggType = 1 - selectedEggType;
+        currentEggSpeed = eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed;
+        animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
         GameManager.instance.uiManager.ShowEggType(selectedEggType);
     }
 
     private IEnumerator WaitAndSpawn() {
-        yield return new WaitForSeconds(eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed);
+        yield return new WaitForSeconds(currentEggSpeed);
         SpawnEgg();
     }
 
@@ -68,6 +77,7 @@ public class Player : MovingObject
         GameObject instance = Instantiate(eggTypes[selectedEggType], transform.position, Quaternion.identity) as GameObject;
 
         instance.transform.SetParent(transform);
+        instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - 0.1f, 0f);
 
         StartCoroutine(WaitAndSpawn());
     }

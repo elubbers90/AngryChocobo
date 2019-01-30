@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
+    <None Include="Assets\Libraries\Cool Flying Birds Art - Starter Pack 1.1\README.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Workspace/AngryChocobo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
