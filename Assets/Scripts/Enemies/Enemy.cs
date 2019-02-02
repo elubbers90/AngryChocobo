@@ -56,6 +56,12 @@ public class Enemy : MovingObject {
         RemoveEnemy();
     }
 
+    public virtual void TakeDamage() {
+        rb2D.velocity = Vector2.zero;
+        animator.SetTrigger("TakeDamage");
+        StartCoroutine(WaitandMove());
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Egg" && currentHp > 0) {
             Egg eggScript = collision.gameObject.GetComponent<Egg>();
@@ -67,9 +73,7 @@ public class Enemy : MovingObject {
                 animator.SetTrigger("Die");
                 StartCoroutine(WaitandRemove());
             } else {
-                rb2D.velocity = Vector2.zero;
-                animator.SetTrigger("TakeDamage");
-                StartCoroutine(WaitandMove());
+                TakeDamage();
             }
         }
     }

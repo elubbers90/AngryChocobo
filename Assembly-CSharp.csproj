@@ -66,6 +66,7 @@
     <Compile Include="Assets\SaveGame\Scripts\SaveSystemSetup.cs" />
     <Compile Include="Assets\Scripts\Egg.cs" />
     <Compile Include="Assets\Scripts\Enemies\ChargingEnemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\DogEnemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\GrazingEnemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\Sheep.cs" />

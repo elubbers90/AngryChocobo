@@ -79,6 +79,7 @@ public class Player : MovingObject
 
         instance.transform.SetParent(transform);
         instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - 0.1f, 0f);
+        instance.transform.localScale = new Vector3(2f, 2f, 1f);
 
         StartCoroutine(WaitAndSpawn());
     }

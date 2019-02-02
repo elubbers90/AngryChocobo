@@ -135,6 +135,7 @@ public class LevelManager : MonoBehaviour {
 
         enemies = new List<GameObject>();
         enemyAmount = Random.Range(15, 20);
+
         enemiesLeft = enemyAmount;
 
         enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
