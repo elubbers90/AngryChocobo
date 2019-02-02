@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System;
 
 public class Player : MovingObject
 {
@@ -16,14 +17,14 @@ public class Player : MovingObject
     public Animator animator;
 
     protected override void Start() {
-        size = GetComponent<Renderer>().bounds.size;
+        Bounds bounds = GetComponent<Renderer>().bounds;
+        size = bounds.size;
         base.Start();
         animator = GetComponent<Animator>();
 
         SwitchEggType();
         SpawnEgg();
     }
-
     private void FixedUpdate() {
         Vector2 start = transform.position;
 

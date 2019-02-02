@@ -137,27 +137,21 @@ public class LevelManager : MonoBehaviour {
         enemyAmount = Random.Range(15, 20);
         enemiesLeft = enemyAmount;
 
+        enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
+        enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
+        enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
 
-        int modded = level % 3;
-        if (modded == 0) {
-            enemies.Add(enemyReferences[modded]);
-            enemies.Add(enemyReferences[modded+3]);
-            enemies.Add(enemyReferences[modded + 6]);
-            enemies.Add(enemyReferences[modded + 9]);
-        } else if (modded == 1) {
-            enemies.Add(enemyReferences[modded]);
-            enemies.Add(enemyReferences[modded + 3]);
-            enemies.Add(enemyReferences[modded + 6]);
-        } else {
-            enemies.Add(enemyReferences[modded]);
-            enemies.Add(enemyReferences[modded + 3]);
-            enemies.Add(enemyReferences[modded + 6]);
-        }
         enabled = true;
 
         levelHolder = new GameObject("Level").transform;
 
         SpawnEnemy();
+    }
+
+    private GameObject GetEnemy(int level, int offset) {
+        int result = (level + offset) % enemyReferences.Length;
+        Debug.Log("Chosen enemy: " + result);
+        return enemyReferences[result];
     }
 
     public bool CheckVictory() {
