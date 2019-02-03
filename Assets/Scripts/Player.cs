@@ -11,10 +11,12 @@ public class Player : MovingObject
     public GameObject[] eggTypes;
 
     [HideInInspector]
-    public int selectedEggType = 1;
+    public int selectedEggType = 0;
     private float currentEggSpeed;
     [HideInInspector]
     public Animator animator;
+
+    private int eggsToShoot;
 
     protected override void Start() {
         Bounds bounds = GetComponent<Renderer>().bounds;
@@ -22,7 +24,10 @@ public class Player : MovingObject
         base.Start();
         animator = GetComponent<Animator>();
 
-        SwitchEggType();
+        selectedEggType = 0;
+        currentEggSpeed = eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed;
+        animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
+        GameManager.instance.uiManager.ShowEggType(selectedEggType);
         SpawnEgg();
     }
     private void FixedUpdate() {
@@ -64,6 +69,9 @@ public class Player : MovingObject
 
     public void SwitchEggType() {
         selectedEggType = 1 - selectedEggType;
+        if (selectedEggType != 0) {
+            eggsToShoot = eggTypes[selectedEggType].GetComponent<Egg>().eggAmount;
+        }
         currentEggSpeed = eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed;
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
         GameManager.instance.uiManager.ShowEggType(selectedEggType);
@@ -80,6 +88,11 @@ public class Player : MovingObject
         instance.transform.SetParent(transform);
         instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - 0.1f, 0f);
         instance.transform.localScale = new Vector3(2f, 2f, 1f);
+
+        eggsToShoot--;
+        if (selectedEggType != 0 && eggsToShoot <= 0) {
+            SwitchEggType();
+        }
 
         StartCoroutine(WaitAndSpawn());
     }

@@ -15,20 +15,22 @@ public class DogEnemy : Enemy {
     public Sprite mouth3;
 
     public bool hideMouth1;
-
+    
+    private int startHp;
     private float baseSpeed;
     private int currentStage;
 
     protected override void Start() {
         base.Start();
         baseSpeed = speed;
+        startHp = currentHp;
         eyeObject2.SetActive(false);
 
         currentStage = 0;
     }
 
     public override void TakeDamage() {
-        float newDamagePercentage = (float)currentHp / (float)baseHp;
+        float newDamagePercentage = (float)currentHp / (float)startHp;
 
         if (newDamagePercentage < 0.5f) {
             if (currentStage < 3) {

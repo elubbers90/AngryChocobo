@@ -35,7 +35,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     private IEnumerator WaitAndSpawn() {
-        float waitTime = Random.Range(1.5f, 3f);
+        float waitTime = Random.Range(1.5f, 2f);
         yield return new WaitForSeconds(waitTime);
         SpawnEnemy();
     }
@@ -134,7 +134,7 @@ public class LevelManager : MonoBehaviour {
         SpawnBackground(level);
 
         enemies = new List<GameObject>();
-        enemyAmount = Random.Range(15, 20);
+        enemyAmount = Random.Range(25, 35);
 
         enemiesLeft = enemyAmount;
 
