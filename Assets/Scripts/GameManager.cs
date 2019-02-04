@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UIManager uiManager;
     public GameObject playerReference;
-    public GameObject cakeReference;
 
-    private int lives = 3;
+    [HideInInspector]
+    public int lives = 3;
     private GameObject player;
     private Player playerScript;
-    private List<GameObject> cakes;
     [HideInInspector]
     public int level;
 
@@ -28,8 +27,7 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
-        cakes = new List<GameObject>();
+        
         levelManager = GetComponent<LevelManager>();
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
@@ -46,22 +44,15 @@ public class GameManager : MonoBehaviour
     public void InitGame() {
         Vector3 world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
         lives = 3;
-        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, 0f, 0f), Quaternion.identity) as GameObject);
-        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, -2f, 0f), Quaternion.identity) as GameObject);
-        cakes.Add(Instantiate(cakeReference, new Vector3(1 - world.x, 2f, 0f), Quaternion.identity) as GameObject);
         levelManager.SetupLevel(level);
-        player = Instantiate(playerReference, new Vector3(3f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
+        player = Instantiate(playerReference, new Vector3(2.5f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
         playerScript = player.GetComponent<Player>();
-        uiManager.ShowEggType(playerScript.selectedEggType);
-        uiManager.ToggleEggSwitcher(true);
+        uiManager.ToggleCakes(true);
     }
 
     public void EnemyHit() {
         lives -= 1;
-        if (cakes.Count > 0) {
-            Destroy(cakes[cakes.Count - 1]);
-            cakes.RemoveAt(cakes.Count - 1);
-        }
+        uiManager.SetCurrentCakesText();
         if (lives <= 0) {
             GameOver();
         }
@@ -105,10 +96,6 @@ public class GameManager : MonoBehaviour
         levelManager.RemoveManager();
 
         Destroy(player);
-        for(int i = 0; i < cakes.Count; i++) {
-            Destroy(cakes[i]);
-        }
-        cakes.Clear();
-        uiManager.ToggleEggSwitcher(false);
+        uiManager.ToggleCakes(false);
     }
 }

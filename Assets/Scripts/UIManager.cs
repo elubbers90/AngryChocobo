@@ -10,24 +10,14 @@ public class UIManager : MonoBehaviour {
     public GameObject gameOverCurrentLevel;
     public GameObject victoryPopup;
     public GameObject victoryCurrentLevel;
-    public GameObject eggSwitcher;
+    public GameObject cake;
+    public GameObject currentCakes;
 
     public void Awake() {
         ToggleGameOver(false);
         ToggleVictory(false);
-        ToggleEggSwitcher(false);
         ToggleMainMenu(false);
-    }
-
-    public void ShowEggType(int eggType) {
-        switch (eggType) {
-            case 0:
-                eggSwitcher.GetComponent<Image>().color = new Color32(0, 255, 225, 255);
-                break;
-            case 1:
-                eggSwitcher.GetComponent<Image>().color = new Color32(255, 154, 0, 255);
-                break;
-        }
+        ToggleCakes(false);
     }
 
     public void ToggleGameOver(bool show) {
@@ -51,10 +41,17 @@ public class UIManager : MonoBehaviour {
         mainMenu.SetActive(show);
     }
 
-    public void ToggleEggSwitcher(bool show) {
-        eggSwitcher.SetActive(show);
+    public void ToggleCakes(bool show) {
+        if (show) {
+            SetCurrentCakesText();
+        }
+        cake.SetActive(show);
+        currentCakes.SetActive(show);
     }
 
+    public void SetCurrentCakesText() {
+        currentCakes.GetComponent<Text>().text = "x " + GameManager.instance.lives;
+    }
 
 
     // click handlers
@@ -63,10 +60,6 @@ public class UIManager : MonoBehaviour {
         ToggleGameOver(false);
         ToggleVictory(false);
         GameManager.instance.InitGame();
-    }
-
-    public void SwitchEggType() {
-        GameManager.instance.SwitchEggType();
     }
 
     public void ToMainMenu() {

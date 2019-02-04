@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour {
     private Tilemap treetops;
     public GameObject[] enemyReferences;
 
+    public GameObject bunnyReference;
+
     [HideInInspector]
     public Transform levelHolder;
 
@@ -26,6 +28,7 @@ public class LevelManager : MonoBehaviour {
     private List<GameObject> enemies;
     private int enemyAmount;
     private int enemiesLeft;
+    private int bunnySpawn;
 
     public void Start() {
         background = GameObject.Find("Background").GetComponent<Tilemap>();
@@ -43,7 +46,13 @@ public class LevelManager : MonoBehaviour {
     private void SpawnEnemy() {
         if (enabled) {
             enemiesLeft--;
-            GameObject toInstantiate = enemies[Random.Range(0, enemies.Count)];
+            GameObject toInstantiate;
+            if (enemyAmount - bunnySpawn == enemiesLeft) {
+                toInstantiate = bunnyReference;
+            } else {
+                toInstantiate = enemies[Random.Range(0, enemies.Count)];
+
+            }
 
             float x = world.x + 1f;
             float y = Random.Range((0 - world.y + 2f), (world.y - 2f));
@@ -141,6 +150,8 @@ public class LevelManager : MonoBehaviour {
         enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
         enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
         enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
+
+        bunnySpawn = Random.Range(5, 10);
 
         enabled = true;
 

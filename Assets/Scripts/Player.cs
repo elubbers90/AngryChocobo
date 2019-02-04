@@ -28,7 +28,6 @@ public class Player : MovingObject
         selectedEggType = 0;
         currentEggSpeed = 0.5f;
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
-        GameManager.instance.uiManager.ShowEggType(selectedEggType);
         SpawnEgg();
     }
     private void FixedUpdate() {
@@ -77,7 +76,6 @@ public class Player : MovingObject
             currentEggSpeed = 0.5f;
         }
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
-        GameManager.instance.uiManager.ShowEggType(selectedEggType);
     }
 
     private IEnumerator WaitAndSpawn() {
