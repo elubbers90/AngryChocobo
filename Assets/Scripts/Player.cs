@@ -16,6 +16,7 @@ public class Player : MovingObject
     [HideInInspector]
     public Animator animator;
 
+    private int lightningEggsAmount = 20;
     private int eggsToShoot;
 
     protected override void Start() {
@@ -25,7 +26,7 @@ public class Player : MovingObject
         animator = GetComponent<Animator>();
 
         selectedEggType = 0;
-        currentEggSpeed = eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed;
+        currentEggSpeed = 0.5f;
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
         GameManager.instance.uiManager.ShowEggType(selectedEggType);
         SpawnEgg();
@@ -69,10 +70,12 @@ public class Player : MovingObject
 
     public void SwitchEggType() {
         selectedEggType = 1 - selectedEggType;
-        if (selectedEggType != 0) {
-            eggsToShoot = eggTypes[selectedEggType].GetComponent<Egg>().eggAmount;
+        if (selectedEggType == 1) {
+            eggsToShoot = lightningEggsAmount;
+            currentEggSpeed = 0.25f;
+        } else {
+            currentEggSpeed = 0.5f;
         }
-        currentEggSpeed = eggTypes[selectedEggType].GetComponent<Egg>().firingSpeed;
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
         GameManager.instance.uiManager.ShowEggType(selectedEggType);
     }

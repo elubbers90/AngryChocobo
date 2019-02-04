@@ -63,10 +63,21 @@ public class Enemy : MovingObject {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Egg" && currentHp > 0) {
-            Egg eggScript = collision.gameObject.GetComponent<Egg>();
-            currentHp -= eggScript.currentDamage;
-            if(currentHp <= 0) {
+        if (collision.gameObject.tag.Contains("Egg") && currentHp > 0) {
+            if (collision.gameObject.tag == "Egg") {
+                Egg eggScript = collision.gameObject.GetComponent<Egg>();
+                currentHp -= eggScript.currentDamage;
+            } else if (collision.gameObject.tag == "LightningEgg") {
+                LightningEgg eggScript = collision.gameObject.GetComponent<LightningEgg>();
+                currentHp -= eggScript.currentDamage;
+                if (eggScript.lightningHit) {
+                    currentHp -= eggScript.lightningDamage;
+                }
+            }
+
+
+
+            if (currentHp <= 0) {
                 rb2D.velocity = Vector2.zero;
                 gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
                 gameObject.tag = "DeadEnemy";
