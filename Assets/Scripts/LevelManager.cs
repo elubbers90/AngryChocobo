@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour {
     private Tilemap treetops;
     public GameObject[] enemyReferences;
 
-    public GameObject bunnyReference;
+    public GameObject[] bunnyReferences;
 
     [HideInInspector]
     public Transform levelHolder;
@@ -48,7 +48,8 @@ public class LevelManager : MonoBehaviour {
             enemiesLeft--;
             GameObject toInstantiate;
             if (enemyAmount - bunnySpawn == enemiesLeft) {
-                toInstantiate = bunnyReference;
+                toInstantiate = bunnyReferences[Random.Range(0,bunnyReferences.Length)];
+                bunnySpawn += Random.Range(10, 15);
             } else {
                 toInstantiate = enemies[Random.Range(0, enemies.Count)];
 

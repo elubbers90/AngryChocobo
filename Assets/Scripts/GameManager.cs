@@ -34,13 +34,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitAndInit());
     }
 
-    void Update() {
-        if(Input.GetKeyDown(KeyCode.RightControl)) {
-            level = 1;
-            SaveSystem.SetInt("level", level);
-        }
-    }
-
     public void InitGame() {
         Vector3 world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
         lives = 3;
@@ -58,9 +51,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SwitchEggType() {
-        playerScript.SwitchEggType();
-
+    public void ActivateEgg(int type) {
+        playerScript.ActivateEgg(type);
     }
 
     private IEnumerator WaitAndInit() {

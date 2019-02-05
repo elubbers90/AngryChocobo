@@ -7,6 +7,8 @@ public class Enemy : MovingObject {
     public float maxSpeed;
     public int baseHp;
 
+    public GameObject fireEffect;
+
     [HideInInspector]
     public int currentHp;
     [HideInInspector]
@@ -15,6 +17,13 @@ public class Enemy : MovingObject {
     public Animator animator;
     [HideInInspector]
     public bool forceStopMove = false;
+
+    [HideInInspector]
+    public int damageOverTime = 0;
+    [HideInInspector]
+    public int damageOverTimeTaken = 0;
+    [HideInInspector]
+    public int damageOverTimeDuration = 0;
 
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
@@ -45,7 +54,7 @@ public class Enemy : MovingObject {
         int hpAtHit = currentHp;
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
-        if (currentHp > 0 && currentHp == hpAtHit) {
+        if (currentHp - damageOverTimeTaken > 0 && currentHp == hpAtHit) {
             SetVelocity();
         }
     }
@@ -62,8 +71,33 @@ public class Enemy : MovingObject {
         StartCoroutine(WaitandMove());
     }
 
+    public virtual IEnumerator TakeDamageOverTime() {
+        int damageAtStart = damageOverTimeTaken;
+        float waitTime = 1f;
+        yield return new WaitForSeconds(waitTime);
+        if (damageOverTimeTaken == damageAtStart) {
+            damageOverTimeTaken += damageOverTime;
+            damageOverTimeDuration--;
+            if (currentHp - damageOverTimeTaken <= 0) {
+                Die();
+            } else if (damageOverTimeDuration > 0) {
+                StartCoroutine(TakeDamageOverTime());
+            } else {
+                fireEffect.SetActive(false);
+            }
+        }
+    }
+
+    public virtual void Die() {
+        rb2D.velocity = Vector2.zero;
+        gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
+        gameObject.tag = "DeadEnemy";
+        animator.SetTrigger("Die");
+        StartCoroutine(WaitandRemove());
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag.Contains("Egg") && currentHp > 0) {
+        if (collision.gameObject.tag.Contains("Egg") && currentHp - damageOverTimeTaken > 0) {
             if (collision.gameObject.tag == "Egg") {
                 Egg eggScript = collision.gameObject.GetComponent<Egg>();
                 currentHp -= eggScript.currentDamage;
@@ -73,23 +107,26 @@ public class Enemy : MovingObject {
                 if (eggScript.lightningHit) {
                     currentHp -= eggScript.lightningDamage;
                 }
+            } else if (collision.gameObject.tag == "FireEgg") {
+                FireEgg eggScript = collision.gameObject.GetComponent<FireEgg>();
+                currentHp -= eggScript.currentDamage;
+                damageOverTime = eggScript.fireDamage;
+                damageOverTimeDuration = eggScript.fireDuration;
+                fireEffect.SetActive(true);
+                StartCoroutine(TakeDamageOverTime());
             }
 
 
 
-            if (currentHp <= 0) {
-                rb2D.velocity = Vector2.zero;
-                gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
-                gameObject.tag = "DeadEnemy";
-                animator.SetTrigger("Die");
-                StartCoroutine(WaitandRemove());
+            if (currentHp - damageOverTimeTaken <= 0) {
+                Die();
             } else {
                 TakeDamage();
             }
         }
     }
 
-    void RemoveEnemy() {
+    public virtual void RemoveEnemy() {
         Destroy(gameObject);
         GameManager.instance.CheckVictory();
     }

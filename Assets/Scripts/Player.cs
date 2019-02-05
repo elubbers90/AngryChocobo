@@ -9,6 +9,8 @@ using System;
 public class Player : MovingObject
 {
     public GameObject[] eggTypes;
+    public GameObject lightningEffect;
+    public GameObject fireEffect;
 
     [HideInInspector]
     public int selectedEggType = 0;
@@ -17,6 +19,7 @@ public class Player : MovingObject
     public Animator animator;
 
     private int lightningEggsAmount = 20;
+    private int fireEggsAmount = 15;
     private int eggsToShoot;
 
     protected override void Start() {
@@ -63,17 +66,33 @@ public class Player : MovingObject
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.LeftControl)) {
-            SwitchEggType();
+            ActivateEgg((selectedEggType+1) % 3);
         }
     }
 
-    public void SwitchEggType() {
-        selectedEggType = 1 - selectedEggType;
+    public void ActivateEgg(int type) {
         if (selectedEggType == 1) {
-            eggsToShoot = lightningEggsAmount;
-            currentEggSpeed = 0.25f;
-        } else {
-            currentEggSpeed = 0.5f;
+            lightningEffect.SetActive(false);
+        } else if (selectedEggType == 2) {
+            fireEffect.SetActive(false);
+        }
+
+        selectedEggType = type;
+
+        switch (selectedEggType) {
+            case 1:
+                eggsToShoot = lightningEggsAmount;
+                currentEggSpeed = 0.25f;
+                lightningEffect.SetActive(true);
+                break;
+            case 2:
+                eggsToShoot = fireEggsAmount;
+                currentEggSpeed = 0.4f;
+                fireEffect.SetActive(true);
+                break;
+            default:
+                currentEggSpeed = 0.5f;
+                break;
         }
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
     }
@@ -92,7 +111,7 @@ public class Player : MovingObject
 
         eggsToShoot--;
         if (selectedEggType != 0 && eggsToShoot <= 0) {
-            SwitchEggType();
+            ActivateEgg(0);
         }
 
         StartCoroutine(WaitAndSpawn());

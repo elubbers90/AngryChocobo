@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DogEnemy : Enemy {
+public class Dog : Enemy {
     public GameObject mouthObject1;
     public GameObject mouthObject2;
     public GameObject headObject;
@@ -29,13 +29,14 @@ public class DogEnemy : Enemy {
         currentStage = 0;
     }
 
-    public override void TakeDamage() {
-        float newDamagePercentage = (float)currentHp / (float)startHp;
+    private void SetDogFace() {
+        float newDamagePercentage = (float)(currentHp - damageOverTimeTaken) / (float)startHp;
 
         if (newDamagePercentage < 0.5f) {
             if (currentStage < 3) {
                 currentStage = 3;
                 speed = baseSpeed * 4;
+                mouthObject2.SetActive(false);
                 if (hideMouth1) {
                     mouthObject1.SetActive(true);
                 }
@@ -49,6 +50,7 @@ public class DogEnemy : Enemy {
             if (currentStage < 2) {
                 currentStage = 2;
                 speed = baseSpeed * 3;
+                mouthObject2.SetActive(false);
                 if (hideMouth1) {
                     mouthObject1.SetActive(true);
                 }
@@ -68,6 +70,15 @@ public class DogEnemy : Enemy {
                 animator.SetFloat("WalkingSpeed", 1.025f);
             }
         }
+    }
+
+    public override void TakeDamage() {
+        SetDogFace();
         base.TakeDamage();
+    }
+     
+    public override IEnumerator TakeDamageOverTime() {
+        SetDogFace();
+        yield return base.TakeDamageOverTime();
     }
 }
