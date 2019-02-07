@@ -8,6 +8,7 @@ public class Enemy : MovingObject {
     public int baseHp;
 
     public GameObject fireEffect;
+    public GameObject waterEffect;
 
     [HideInInspector]
     public int currentHp;
@@ -109,6 +110,7 @@ public class Enemy : MovingObject {
         }
         yield return new WaitForSeconds(slowDuration);
         if (currentSlowIndex == slowIndex) {
+            waterEffect.SetActive(false);
             slowMultiplier = 1f;
             speed = speedBefore;
 
@@ -152,6 +154,11 @@ public class Enemy : MovingObject {
                 WaterEgg eggScript = collision.gameObject.GetComponent<WaterEgg>();
                 currentHp -= eggScript.currentDamage;
                 slowDuration = eggScript.waterduration;
+
+                int sortingOrder = transform.Find("Body").gameObject.GetComponent<Renderer>().sortingOrder;
+                waterEffect.GetComponent<Renderer>().sortingOrder = sortingOrder + 1;
+                waterEffect.SetActive(true);
+                
                 StartCoroutine(SetSlow(eggScript.slowMultiplier));
             }
 
