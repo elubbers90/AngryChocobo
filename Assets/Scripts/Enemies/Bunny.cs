@@ -8,12 +8,16 @@ public class Bunny : Enemy {
 
     public override void Die() {
         base.Die();
-        specialEffect.SetActive(false);
+        if (specialEffect != null) {
+            specialEffect.SetActive(false);
+        }
     }
 
     public override void RemoveEnemy() {
         base.RemoveEnemy();
 
-        GameManager.instance.ActivateEgg(eggType);
+        if (gameObject.tag == "DeadEnemy") {
+            GameManager.instance.ActivateEgg(eggType);
+        }
     }
 }

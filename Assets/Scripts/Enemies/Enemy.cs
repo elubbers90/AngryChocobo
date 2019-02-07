@@ -114,6 +114,9 @@ public class Enemy : MovingObject {
                 damageOverTimeDuration = eggScript.fireDuration;
                 fireEffect.SetActive(true);
                 StartCoroutine(TakeDamageOverTime());
+            } else if (collision.gameObject.tag == "EnergyEgg") {
+                EnergyEgg eggScript = collision.gameObject.GetComponent<EnergyEgg>();
+                currentHp -= eggScript.currentDamage;
             }
 
 

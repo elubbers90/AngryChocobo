@@ -11,6 +11,7 @@ public class Player : MovingObject
     public GameObject[] eggTypes;
     public GameObject lightningEffect;
     public GameObject fireEffect;
+    public GameObject energyEffect;
 
     [HideInInspector]
     public int selectedEggType = 0;
@@ -20,6 +21,7 @@ public class Player : MovingObject
 
     private int lightningEggsAmount = 20;
     private int fireEggsAmount = 15;
+    private int energyEggsAmount = 25;
     private int eggsToShoot;
 
     protected override void Start() {
@@ -66,7 +68,7 @@ public class Player : MovingObject
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.LeftControl)) {
-            ActivateEgg((selectedEggType+1) % 3);
+            ActivateEgg((selectedEggType + 1) % 4);
         }
     }
 
@@ -75,6 +77,8 @@ public class Player : MovingObject
             lightningEffect.SetActive(false);
         } else if (selectedEggType == 2) {
             fireEffect.SetActive(false);
+        } else if (selectedEggType == 3) {
+            energyEffect.SetActive(false);
         }
 
         selectedEggType = type;
@@ -89,6 +93,11 @@ public class Player : MovingObject
                 eggsToShoot = fireEggsAmount;
                 currentEggSpeed = 0.4f;
                 fireEffect.SetActive(true);
+                break;
+            case 3:
+                eggsToShoot = energyEggsAmount;
+                currentEggSpeed = 0.2f;
+                energyEffect.SetActive(true);
                 break;
             default:
                 currentEggSpeed = 0.5f;
