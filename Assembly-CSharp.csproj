@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Eggs\EnergyEgg.cs" />
     <Compile Include="Assets\Scripts\Eggs\FireEgg.cs" />
     <Compile Include="Assets\Scripts\Eggs\LightningEgg.cs" />
+    <Compile Include="Assets\Scripts\Eggs\WaterEgg.cs" />
     <Compile Include="Assets\Scripts\Enemies\Bunny.cs" />
     <Compile Include="Assets\Scripts\Enemies\ChargingEnemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\Dog.cs" />

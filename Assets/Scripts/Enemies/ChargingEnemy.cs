@@ -5,9 +5,11 @@ using UnityEngine;
 public class ChargingEnemy : Enemy {
     public float minChargeTime;
     public float maxChargeTime;
+    private float baseSpeed;
 
     protected override void Start() {
         base.Start();
+        baseSpeed = speed;
         StartCoroutine(StartRandomChargeTimer());
     }
 
@@ -23,7 +25,9 @@ public class ChargingEnemy : Enemy {
         float waitTime = 1.2f;
         animator.SetTrigger("Charge");
         yield return new WaitForSeconds(waitTime);
-        speed *= 2;
+        speed = baseSpeed * 2;
+        speedBefore = speed;
+        speed *= slowMultiplier;
         if (currentHp > 0) {
             forceStopMove = false;
             SetVelocity();

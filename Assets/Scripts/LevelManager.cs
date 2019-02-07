@@ -50,6 +50,8 @@ public class LevelManager : MonoBehaviour {
             if (enemyAmount - bunnySpawn == enemiesLeft) {
                 toInstantiate = bunnyReferences[Random.Range(0, bunnyReferences.Length)];
                 bunnySpawn += Random.Range(10, 15);
+
+                toInstantiate = bunnyReferences[3];
             } else {
                 toInstantiate = enemies[Random.Range(0, enemies.Count)];
 
@@ -145,6 +147,7 @@ public class LevelManager : MonoBehaviour {
 
         enemies = new List<GameObject>();
         enemyAmount = Random.Range(25, 35);
+        enemyAmount = 1;
 
         enemiesLeft = enemyAmount;
 

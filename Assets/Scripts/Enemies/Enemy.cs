@@ -25,6 +25,14 @@ public class Enemy : MovingObject {
     [HideInInspector]
     public int damageOverTimeDuration = 0;
 
+    [HideInInspector]
+    public float slowMultiplier = 1;
+    [HideInInspector]
+    public int slowDuration = 0;
+    private int slowIndex = 0;
+    [HideInInspector]
+    public float speedBefore;
+
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
         base.Start();
@@ -88,6 +96,29 @@ public class Enemy : MovingObject {
         }
     }
 
+    public virtual IEnumerator SetSlow(float newSlow) {
+        slowIndex++;
+        int currentSlowIndex = slowIndex;
+        if (slowMultiplier == 1f) {
+            slowMultiplier = newSlow;
+            speedBefore = speed;
+            speed *= slowMultiplier;
+        }
+        if (rb2D.velocity != Vector2.zero) {
+            SetVelocity();
+        }
+        yield return new WaitForSeconds(slowDuration);
+        if (currentSlowIndex == slowIndex) {
+            slowMultiplier = 1f;
+            speed = speedBefore;
+
+            if (rb2D.velocity != Vector2.zero) {
+                SetVelocity();
+            }
+        }
+
+    }
+
     public virtual void Die() {
         rb2D.velocity = Vector2.zero;
         gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
@@ -117,6 +148,11 @@ public class Enemy : MovingObject {
             } else if (collision.gameObject.tag == "EnergyEgg") {
                 EnergyEgg eggScript = collision.gameObject.GetComponent<EnergyEgg>();
                 currentHp -= eggScript.currentDamage;
+            } else if (collision.gameObject.tag == "WaterEgg") {
+                WaterEgg eggScript = collision.gameObject.GetComponent<WaterEgg>();
+                currentHp -= eggScript.currentDamage;
+                slowDuration = eggScript.waterduration;
+                StartCoroutine(SetSlow(eggScript.slowMultiplier));
             }
 
 

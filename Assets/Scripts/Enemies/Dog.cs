@@ -36,6 +36,8 @@ public class Dog : Enemy {
             if (currentStage < 3) {
                 currentStage = 3;
                 speed = baseSpeed * 4;
+                speedBefore = speed;
+                speed *= slowMultiplier;
                 mouthObject2.SetActive(false);
                 if (hideMouth1) {
                     mouthObject1.SetActive(true);
@@ -50,6 +52,8 @@ public class Dog : Enemy {
             if (currentStage < 2) {
                 currentStage = 2;
                 speed = baseSpeed * 3;
+                speedBefore = speed;
+                speed *= slowMultiplier;
                 mouthObject2.SetActive(false);
                 if (hideMouth1) {
                     mouthObject1.SetActive(true);
@@ -61,6 +65,8 @@ public class Dog : Enemy {
             if (currentStage == 0) {
                 currentStage = 1;
                 speed = baseSpeed * 2;
+                speedBefore = speed;
+                speed *= slowMultiplier;
                 mouthObject2.SetActive(false);
                 if (hideMouth1) {
                     mouthObject1.SetActive(false);

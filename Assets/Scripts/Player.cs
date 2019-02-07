@@ -22,6 +22,7 @@ public class Player : MovingObject
     private int lightningEggsAmount = 20;
     private int fireEggsAmount = 15;
     private int energyEggsAmount = 25;
+    private int waterEggsAmount = 10; 
     private int eggsToShoot;
 
     protected override void Start() {
@@ -68,7 +69,8 @@ public class Player : MovingObject
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.LeftControl)) {
-            ActivateEgg((selectedEggType + 1) % 4);
+            //ActivateEgg((selectedEggType + 1) % 5);
+            ActivateEgg(4);
         }
     }
 
@@ -98,6 +100,10 @@ public class Player : MovingObject
                 eggsToShoot = energyEggsAmount;
                 currentEggSpeed = 0.2f;
                 energyEffect.SetActive(true);
+                break;
+            case 4:
+                eggsToShoot = waterEggsAmount;
+                currentEggSpeed = 0.5f;
                 break;
             default:
                 currentEggSpeed = 0.5f;
