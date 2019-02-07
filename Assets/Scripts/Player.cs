@@ -69,8 +69,7 @@ public class Player : MovingObject
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.LeftControl)) {
-            //ActivateEgg((selectedEggType + 1) % 5);
-            ActivateEgg(4);
+            ActivateEgg((selectedEggType + 1) % 5);
         }
     }
 
