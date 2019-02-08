@@ -5,7 +5,7 @@ using System.IO;
 public static class SaveSystem {
 	
 	private static string file;
-	private static bool loaded;
+	private static bool loaded = false;
 	private static DataState data;
 
 	public static void Initialize(string fileName) // initialization (used once, after the application starts)
@@ -17,6 +17,10 @@ public static class SaveSystem {
 			loaded = true;
 		}
 	}
+
+    public static bool IsLoaded() {
+        return loaded;
+    }
 
 	static string GetPath()
 	{

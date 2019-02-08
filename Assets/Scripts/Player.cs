@@ -12,6 +12,7 @@ public class Player : MovingObject
     public GameObject lightningEffect;
     public GameObject fireEffect;
     public GameObject energyEffect;
+    public GameObject waterEffect;
 
     [HideInInspector]
     public int selectedEggType = 0;
@@ -80,6 +81,8 @@ public class Player : MovingObject
             fireEffect.SetActive(false);
         } else if (selectedEggType == 3) {
             energyEffect.SetActive(false);
+        } else if (selectedEggType == 4) {
+            waterEffect.SetActive(false);
         }
 
         selectedEggType = type;
@@ -103,6 +106,7 @@ public class Player : MovingObject
             case 4:
                 eggsToShoot = waterEggsAmount;
                 currentEggSpeed = 0.5f;
+                waterEffect.SetActive(true);
                 break;
             default:
                 currentEggSpeed = 0.5f;

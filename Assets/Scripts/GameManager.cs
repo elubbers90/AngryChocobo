@@ -56,10 +56,14 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator WaitAndInit() {
-        float waitTime = 2f;
+        float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
-        level = SaveSystem.GetInt("level", 1);
-        uiManager.ToggleMainMenu(true);
+        if (SaveSystem.IsLoaded()) {
+            level = SaveSystem.GetInt("level", 1);
+            StartCoroutine(uiManager.ToggleSplashScreen(false));
+        } else {
+            StartCoroutine(WaitAndInit());
+        }
     }
 
     private IEnumerator WaitAndCheck() {

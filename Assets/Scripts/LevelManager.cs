@@ -77,12 +77,13 @@ public class LevelManager : MonoBehaviour {
     private void SpawnBackground(int level) {
         background.ClearAllTiles();
         foreground.ClearAllTiles();
+        treetops.ClearAllTiles();
 
-        int minBackgroundRange = (((int)Math.Floor((decimal)(level + 5) / 5)) % 4) * 5;
+        int minBackgroundRange = (((int)Math.Floor((decimal)(level + 3) / 3)) % 4) * 5;
         Debug.Log("[minBackgroundRange " + minBackgroundRange);
         int chosenIndex = Random.Range(minBackgroundRange, minBackgroundRange + 5);
 
-        int minForegroundRange = (((int)Math.Floor((decimal)(level + 5) / 5)) % 4) * 10;
+        int minForegroundRange = (((int)Math.Floor((decimal)(level + 3) / 3)) % 4) * 10;
         Debug.Log("[minForegroundRange " + minForegroundRange);
         int chosenForeground1 = Random.Range(minForegroundRange, minForegroundRange + 10);
         int chosenForeground2 = Random.Range(minForegroundRange, minForegroundRange + 10);
@@ -118,27 +119,47 @@ public class LevelManager : MonoBehaviour {
             }
         }
 
+        int tree1 = Random.Range(left, left + 2);
+        int tree2 = Random.Range(tree1 + 4, tree1 + 7);
+        int tree3 = Random.Range(tree2 + 5, tree2 + 8);
+        int tree4 = Random.Range(tree3 + 4, tree3 + 7);
 
-        treetops.SetTile(new Vector3Int(left, bottom, 0), treeTiles[minBackgroundRange]);
-        treetops.SetTile(new Vector3Int(left + 1, bottom, 0), treeTiles[minBackgroundRange + 1]);
-        treetops.SetTile(new Vector3Int(left + 2, bottom, 0), treeTiles[minBackgroundRange + 2]);
-        treetops.SetTile(new Vector3Int(left + 3, bottom, 0), treeTiles[minBackgroundRange + 3]);
-        treetops.SetTile(new Vector3Int(left + 4, bottom, 0), treeTiles[minBackgroundRange + 1]);
-        treetops.SetTile(new Vector3Int(left + 5, bottom, 0), treeTiles[minBackgroundRange + 2]);
-        treetops.SetTile(new Vector3Int(left + 6, bottom, 0), treeTiles[minBackgroundRange + 3]);
-        treetops.SetTile(new Vector3Int(left + 7, bottom, 0), treeTiles[minBackgroundRange + 4]);
+        treetops.SetTile(new Vector3Int(tree1, bottom, 0), treeTiles[minBackgroundRange]);
+        treetops.SetTile(new Vector3Int(tree1 + 1, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(tree1 + 2, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(tree1 + 3, bottom, 0), treeTiles[minBackgroundRange + 3]);
 
-        treetops.SetTile(new Vector3Int(0, bottom, 0), treeTiles[minBackgroundRange]);
-        treetops.SetTile(new Vector3Int(1, bottom, 0), treeTiles[minBackgroundRange + 1]);
-        treetops.SetTile(new Vector3Int(2, bottom, 0), treeTiles[minBackgroundRange + 2]);
-        treetops.SetTile(new Vector3Int(3, bottom, 0), treeTiles[minBackgroundRange + 3]);
-        treetops.SetTile(new Vector3Int(4, bottom, 0), treeTiles[minBackgroundRange + 4]);
+        int tree2Offset = 0;
+        if (tree1 + 4 != tree2) {
+            treetops.SetTile(new Vector3Int(tree1 + 4, bottom, 0), treeTiles[minBackgroundRange + 4]);
+            treetops.SetTile(new Vector3Int(tree2, bottom, 0), treeTiles[minBackgroundRange]);
+        } else {
+            tree2Offset = 1;
+        }
 
-        treetops.SetTile(new Vector3Int(right - 5, bottom, 0), treeTiles[minBackgroundRange]);
-        treetops.SetTile(new Vector3Int(right - 4, bottom, 0), treeTiles[minBackgroundRange + 1]);
-        treetops.SetTile(new Vector3Int(right - 3, bottom, 0), treeTiles[minBackgroundRange + 2]);
-        treetops.SetTile(new Vector3Int(right - 2, bottom, 0), treeTiles[minBackgroundRange + 3]);
-        treetops.SetTile(new Vector3Int(right - 1, bottom, 0), treeTiles[minBackgroundRange + 4]);
+        treetops.SetTile(new Vector3Int(tree2 + 1 - tree2Offset, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(tree2 + 2 - tree2Offset, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(tree2 + 3 - tree2Offset, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(tree2 + 4 - tree2Offset, bottom, 0), treeTiles[minBackgroundRange + 4]);
+
+        treetops.SetTile(new Vector3Int(tree3, bottom, 0), treeTiles[minBackgroundRange]);
+        treetops.SetTile(new Vector3Int(tree3 + 1, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(tree3 + 2, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(tree3 + 3, bottom, 0), treeTiles[minBackgroundRange + 3]);
+
+
+        int tree4Offset = 0;
+        if (tree3 + 4 != tree4) {
+            treetops.SetTile(new Vector3Int(tree3 + 4, bottom, 0), treeTiles[minBackgroundRange + 4]);
+            treetops.SetTile(new Vector3Int(tree4, bottom, 0), treeTiles[minBackgroundRange]);
+        } else {
+            tree4Offset = 1;
+        }
+
+        treetops.SetTile(new Vector3Int(tree4 + 1 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 1]);
+        treetops.SetTile(new Vector3Int(tree4 + 2 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 2]);
+        treetops.SetTile(new Vector3Int(tree4 + 3 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 3]);
+        treetops.SetTile(new Vector3Int(tree4 + 4 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 4]);
     }
 
     public void SetupLevel(int level) {
@@ -159,12 +180,11 @@ public class LevelManager : MonoBehaviour {
 
         levelHolder = new GameObject("Level").transform;
 
-        SpawnEnemy();
+        StartCoroutine(WaitAndSpawn());
     }
 
     private GameObject GetEnemy(int level, int offset) {
         int result = (level + offset) % enemyReferences.Length;
-        Debug.Log("Chosen enemy: " + result);
         return enemyReferences[result];
     }
 
