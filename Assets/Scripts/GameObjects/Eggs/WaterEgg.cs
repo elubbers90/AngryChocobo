@@ -11,6 +11,14 @@ public class WaterEgg : Egg {
     public GameObject specialDeathEffect;
     private GameObject specialDeathEffectInstance;
 
+    public override void SetMovingSpeed() {
+        movingSpeed = SaveSystem.GetFloat("waterEggSpeed", 10f);
+    }
+
+    public override void SetDamage() {
+        currentDamage = SaveSystem.GetInt("waterEggDamage", 3);
+    }
+
     public override IEnumerator WaitandRemove() {
         Vector3 size = specialDeathEffect.GetComponent<Renderer>().bounds.size;
         Vector3 position = transform.position;

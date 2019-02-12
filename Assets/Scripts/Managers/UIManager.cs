@@ -133,8 +133,10 @@ public class UIManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(true);
         foreach (Transform child in upgradeScreen.transform) {
+            child.gameObject.SetActive(true);
             StartCoroutine(ScaleObject(true, child.gameObject));
         }
+        UpdateUpgradeScreenButtons();
     }
 
     private IEnumerator HideUpgradeScreen() {
@@ -144,6 +146,7 @@ public class UIManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(false);
         ToggleMainMenu(true, true);
+        SaveSystem.SaveToDisk();
     }
 
     public void ToggleGameOverlay(bool show) {
@@ -157,6 +160,12 @@ public class UIManager : MonoBehaviour {
         currentCakes.GetComponent<Text>().text = "x " + GameManager.instance.lives;
     }
 
+    public void UpdateUpgradeScreenButtons() {
+        UpgradeButton[] buttons = upgradeScreen.GetComponentsInChildren<UpgradeButton>();
+        foreach(UpgradeButton button in buttons) {
+            button.SetState();
+        }
+    }
 
     // click handlers
     public void StartMission() {
@@ -183,9 +192,19 @@ public class UIManager : MonoBehaviour {
     public void ResetGame() {
         GameManager.instance.level = 1;
         SaveSystem.SetInt("level", 1);
-        GameManager.instance.purchasedEggs = new List<int>();
+        GameManager.instance.purchasedEggs.Clear();
         GameManager.instance.purchasedEggs.Add(0);
         SaveSystem.SetString("purchasedEggs", "0");
+        SaveSystem.SetInt("basicEggDamage", 2);
+        SaveSystem.SetInt("lightningEggDamage", 4);
+        SaveSystem.SetInt("fireEggDamage", 3);
+        SaveSystem.SetInt("energyEggDamage", 4);
+        SaveSystem.SetInt("waterEggDamage", 3);
+        SaveSystem.SetFloat("basicEggSpeed", 10f);
+        SaveSystem.SetFloat("lightningEggSpeed", 15f);
+        SaveSystem.SetFloat("fireEggSpeed", 10f) ;
+        SaveSystem.SetFloat("energyEggSpeed", 10f);
+        SaveSystem.SetFloat("waterEggSpeed", 10f);
         SetCurrentProgress();
     }
 

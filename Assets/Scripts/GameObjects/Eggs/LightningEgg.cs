@@ -4,16 +4,21 @@ using System.Collections;
 public class LightningEgg : Egg {
     public bool lightningHit;
     [HideInInspector]
-    public int extraMovespeed = 5;
-    [HideInInspector]
     public int lightningDamage = 5;
 
     public GameObject specialDeathEffect;
     private GameObject specialDeathEffectInstance;
 
     protected override void Start() {
-        movingSpeed += extraMovespeed;
         base.Start();
+    }
+
+    public override void SetMovingSpeed() {
+        movingSpeed = SaveSystem.GetFloat("lightningEggSpeed", 15f);
+    }
+
+    public override void SetDamage() {
+        currentDamage = SaveSystem.GetInt("lightningEggDamage", 4);
     }
 
     public override IEnumerator WaitandRemove() {

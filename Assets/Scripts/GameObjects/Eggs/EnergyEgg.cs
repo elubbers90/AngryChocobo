@@ -8,8 +8,6 @@ public class EnergyEgg : Egg {
     public float teleportRange = 1.5f;
     [HideInInspector]
     public float teleportDelay = 0.1f;
-    [HideInInspector]
-    public int extraDamage = 2;
 
     public GameObject DisappearAnimation;
     public GameObject AppearAnimation;
@@ -22,11 +20,17 @@ public class EnergyEgg : Egg {
         movingSpeed = 5;
         base.Start();
 
-        currentDamage += extraDamage;
-
         world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
 
         SelectEnemy();
+    }
+
+    public override void SetMovingSpeed() {
+        movingSpeed = SaveSystem.GetFloat("energyEggSpeed", 10f);
+    }
+
+    public override void SetDamage() {
+        currentDamage = SaveSystem.GetInt("energyEggDamage", 4);
     }
 
     private void SelectEnemy() {
@@ -81,7 +85,7 @@ public class EnergyEgg : Egg {
     private void Appear() {
         AppearAnimation.SetActive(true);
         transform.position = new Vector3(transform.position.x, chosenY, transform.position.z);
-        movingSpeed = movingSpeed * 4;
+        movingSpeed = movingSpeed + 10;
         rb2D.velocity = transform.TransformDirection(Vector3.right * movingSpeed);
     }
 }

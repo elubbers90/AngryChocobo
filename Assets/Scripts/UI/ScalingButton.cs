@@ -8,18 +8,26 @@ public class ScalingButton : Button, IPointerEnterHandler, IPointerExitHandler {
     private Coroutine currentRoutine;
 
     public override void OnPointerEnter(PointerEventData eventData) {
-        if (currentRoutine != null) {
-            StopCoroutine(currentRoutine);
+        if (interactable) {
+            if (currentRoutine != null) {
+                StopCoroutine(currentRoutine);
+            }
+            currentRoutine = StartCoroutine(ScaleObject(true));
+        } else {
+            transform.localScale = new Vector3(1, 1, 1);
         }
-        currentRoutine = StartCoroutine(ScaleObject(true));
     }
 
     //Do this when the cursor exits the rect area of this selectable UI object.
     public override void OnPointerExit(PointerEventData eventData) {
-        if (currentRoutine != null) {
-            StopCoroutine(currentRoutine);
+        if (interactable) {
+            if (currentRoutine != null) {
+                StopCoroutine(currentRoutine);
+            }
+            currentRoutine = StartCoroutine(ScaleObject(false));
+        } else {
+            transform.localScale = new Vector3(1, 1, 1);
         }
-        currentRoutine = StartCoroutine(ScaleObject(false));
     }
 
     IEnumerator ScaleObject(bool smaller) {

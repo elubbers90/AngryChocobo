@@ -83,8 +83,8 @@
     <Compile Include="Assets\Scripts\Managers\Loader.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
-    <Compile Include="Assets\Scripts\UI\EggPurchaseButton.cs" />
     <Compile Include="Assets\Scripts\UI\ScalingButton.cs" />
+    <Compile Include="Assets\Scripts\UI\UpgradeButton.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Workspace/AngryChocobo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

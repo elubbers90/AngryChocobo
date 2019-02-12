@@ -184,8 +184,6 @@ public class LevelManager : MonoBehaviour {
 
         bunnySpawn = Random.Range(5, 10);
 
-        bunnySpawn = 1;
-
         enabled = true;
 
         levelHolder = new GameObject("Level").transform;

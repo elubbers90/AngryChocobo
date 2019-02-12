@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Egg : MovingObject {
     [HideInInspector]
-    public float movingSpeed = 10;
-    [HideInInspector]
-    public int baseDamage = 1;
+    public float movingSpeed;
 
     [HideInInspector]
     public int currentDamage;
@@ -15,11 +13,22 @@ public class Egg : MovingObject {
 
     protected override void Start() {
         base.Start();
+
+        SetMovingSpeed();
+
         rb2D.velocity = transform.TransformDirection(Vector3.right * movingSpeed);
 
-        currentDamage = baseDamage;
+        SetDamage();
 
         animator = GetComponent<Animator>();
+    }
+
+    public virtual void SetMovingSpeed() {
+        movingSpeed = SaveSystem.GetFloat("basicEggSpeed", 10f);
+    }
+
+    public virtual void SetDamage() {
+        currentDamage = SaveSystem.GetInt("basicEggDamage", 2);
     }
 
     private void FixedUpdate() {
@@ -35,6 +44,7 @@ public class Egg : MovingObject {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
+        Debug.Log("Current damage: " + currentDamage);
         rb2D.velocity = Vector2.zero;
         gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
         animator.SetTrigger("Explode");

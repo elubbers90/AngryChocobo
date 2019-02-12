@@ -33,7 +33,7 @@ public class Player : MovingObject
         animator = GetComponent<Animator>();
 
         selectedEggType = 0;
-        currentEggSpeed = 0.5f;
+        currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("basicEggSpeed", 10f) - 10f) / 50f);
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
         SpawnEgg();
     }
@@ -90,26 +90,26 @@ public class Player : MovingObject
         switch (selectedEggType) {
             case 1:
                 eggsToShoot = lightningEggsAmount;
-                currentEggSpeed = 0.25f;
+                currentEggSpeed = 0.25f - ((SaveSystem.GetFloat("lightningEggSpeed", 10f) - 10f) / 100f);
                 lightningEffect.SetActive(true);
                 break;
             case 2:
                 eggsToShoot = fireEggsAmount;
-                currentEggSpeed = 0.4f;
+                currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("fireEggSpeed", 10f) - 10f) / 50f);
                 fireEffect.SetActive(true);
                 break;
             case 3:
                 eggsToShoot = energyEggsAmount;
-                currentEggSpeed = 0.2f;
+                currentEggSpeed = 0.2f - ((SaveSystem.GetFloat("energyEggSpeed", 10f) - 10f) / 150f);
                 energyEffect.SetActive(true);
                 break;
             case 4:
                 eggsToShoot = waterEggsAmount;
-                currentEggSpeed = 0.5f;
+                currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("waterEggSpeed", 10f) - 10f) / 50f);
                 waterEffect.SetActive(true);
                 break;
             default:
-                currentEggSpeed = 0.5f;
+                currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("basicEggSpeed", 10f) - 10f) / 50f);
                 break;
         }
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);

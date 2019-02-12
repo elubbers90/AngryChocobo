@@ -106,6 +106,46 @@ public class GameManager : MonoBehaviour
     public void PurchaseEgg(int eggType) {
         purchasedEggs.Add(eggType);
         SaveSystem.SetString("purchasedEggs", Utils.IntListToString(purchasedEggs));
-        SaveSystem.SaveToDisk();
+        uiManager.UpdateUpgradeScreenButtons();
+    }
+
+    public void IncreaseEggDamage(int eggType) {
+        switch (eggType) {
+            case 0:
+                SaveSystem.SetInt("basicEggDamage", SaveSystem.GetInt("basicEggDamage", 2) + 1);
+                break;
+            case 1:
+                SaveSystem.SetInt("lightningEggDamage", SaveSystem.GetInt("lightningEggDamage", 4) + 1);
+                break;
+            case 2:
+                SaveSystem.SetInt("fireEggDamage", SaveSystem.GetInt("fireEggDamage", 3) + 1);
+                break;
+            case 3:
+                SaveSystem.SetInt("energyEggDamage", SaveSystem.GetInt("energyEggDamage", 4) + 1);
+                break;
+            case 4:
+                SaveSystem.SetInt("waterEggDamage", SaveSystem.GetInt("waterEggDamage", 3) + 1);
+                break;
+        }
+    }
+
+    public void IncreaseEggSpeed(int eggType) {
+        switch (eggType) {
+            case 0:
+                SaveSystem.SetFloat("basicEggSpeed", SaveSystem.GetFloat("basicEggSpeed", 10f) + 0.1f);
+                break;
+            case 1:
+                SaveSystem.SetFloat("lightningEggSpeed", SaveSystem.GetFloat("lightningEggSpeed", 15f) + 0.1f);
+                break;
+            case 2:
+                SaveSystem.SetFloat("fireEggSpeed", SaveSystem.GetFloat("fireEggSpeed", 10f) + 0.1f);
+                break;
+            case 3:
+                SaveSystem.SetFloat("energyEggSpeed", SaveSystem.GetFloat("energyEggSpeed", 10f) + 0.1f);
+                break;
+            case 4:
+                SaveSystem.SetFloat("waterEggSpeed", SaveSystem.GetFloat("waterEggSpeed", 10f) + 0.1f);
+                break;
+        }
     }
 }
