@@ -2,15 +2,18 @@
 using System.Collections;
 
 public class LightningEgg : Egg {
+    [HideInInspector]
     public bool lightningHit;
     [HideInInspector]
-    public int lightningDamage = 5;
+    public int lightningDamage;
 
     public GameObject specialDeathEffect;
     private GameObject specialDeathEffectInstance;
 
     protected override void Start() {
         base.Start();
+        lightningHit = SaveSystem.GetBool("lightningEggBolt", false);
+        lightningDamage = SaveSystem.GetInt("lightningEggBoltDamage", 5);
     }
 
     public override void SetMovingSpeed() {
@@ -27,7 +30,7 @@ public class LightningEgg : Egg {
             Vector3 position = transform.position;
             position.y += (size.y / 4);
             specialDeathEffectInstance = Instantiate(specialDeathEffect, position, Quaternion.identity) as GameObject;
-            specialDeathEffectInstance.transform.SetParent(GameManager.instance.levelManager.levelHolder);
+            specialDeathEffectInstance.transform.SetParent(GameManager.instance.levelManager.effectsHolder);
         }
 
         yield return base.WaitandRemove();

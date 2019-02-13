@@ -20,10 +20,6 @@ public class Player : MovingObject
     [HideInInspector]
     public Animator animator;
 
-    private int lightningEggsAmount = 20;
-    private int fireEggsAmount = 15;
-    private int energyEggsAmount = 25;
-    private int waterEggsAmount = 10; 
     private int eggsToShoot;
 
     protected override void Start() {
@@ -89,22 +85,22 @@ public class Player : MovingObject
 
         switch (selectedEggType) {
             case 1:
-                eggsToShoot = lightningEggsAmount;
+                eggsToShoot = SaveSystem.GetInt("lightningEggAmount", 20);
                 currentEggSpeed = 0.25f - ((SaveSystem.GetFloat("lightningEggSpeed", 10f) - 10f) / 100f);
                 lightningEffect.SetActive(true);
                 break;
             case 2:
-                eggsToShoot = fireEggsAmount;
+                eggsToShoot = SaveSystem.GetInt("fireEggAmount", 15);
                 currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("fireEggSpeed", 10f) - 10f) / 50f);
                 fireEffect.SetActive(true);
                 break;
             case 3:
-                eggsToShoot = energyEggsAmount;
+                eggsToShoot = SaveSystem.GetInt("energyEggAmount", 25);
                 currentEggSpeed = 0.2f - ((SaveSystem.GetFloat("energyEggSpeed", 10f) - 10f) / 150f);
                 energyEffect.SetActive(true);
                 break;
             case 4:
-                eggsToShoot = waterEggsAmount;
+                eggsToShoot = SaveSystem.GetInt("waterEggAmount", 15);
                 currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("waterEggSpeed", 10f) - 10f) / 50f);
                 waterEffect.SetActive(true);
                 break;

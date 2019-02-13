@@ -25,6 +25,7 @@ public class Enemy : MovingObject {
     public int damageOverTimeTaken = 0;
     [HideInInspector]
     public int damageOverTimeDuration = 0;
+    private float damageOverTimeSpeed = 1f;
 
     [HideInInspector]
     public float slowMultiplier = 1;
@@ -82,7 +83,7 @@ public class Enemy : MovingObject {
 
     public virtual IEnumerator TakeDamageOverTime() {
         int damageAtStart = damageOverTimeTaken;
-        float waitTime = 1f;
+        float waitTime = damageOverTimeSpeed;
         yield return new WaitForSeconds(waitTime);
         if (damageOverTimeTaken == damageAtStart) {
             damageOverTimeTaken += damageOverTime;
@@ -145,6 +146,7 @@ public class Enemy : MovingObject {
                 currentHp -= eggScript.currentDamage;
                 damageOverTime = eggScript.fireDamage;
                 damageOverTimeDuration = eggScript.fireDuration;
+                damageOverTimeSpeed = eggScript.fireSpeed;
                 fireEffect.SetActive(true);
                 StartCoroutine(TakeDamageOverTime());
             } else if (collision.gameObject.tag == "EnergyEgg") {

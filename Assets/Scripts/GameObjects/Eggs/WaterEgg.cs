@@ -25,7 +25,7 @@ public class WaterEgg : Egg {
         position.y += (size.y / 4);
         position.x += (size.x / 8);
         specialDeathEffectInstance = Instantiate(specialDeathEffect, position, Quaternion.identity) as GameObject;
-        specialDeathEffectInstance.transform.SetParent(GameManager.instance.levelManager.levelHolder);
+        specialDeathEffectInstance.transform.SetParent(GameManager.instance.levelManager.effectsHolder);
 
         yield return base.WaitandRemove();
 

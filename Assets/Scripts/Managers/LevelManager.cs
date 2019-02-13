@@ -23,6 +23,8 @@ public class LevelManager : MonoBehaviour {
 
     [HideInInspector]
     public Transform levelHolder;
+    [HideInInspector]
+    public Transform effectsHolder;
 
     private Vector3 world;
 
@@ -187,6 +189,7 @@ public class LevelManager : MonoBehaviour {
         enabled = true;
 
         levelHolder = new GameObject("Level").transform;
+        effectsHolder = new GameObject("Effects").transform;
 
         StartCoroutine(WaitAndSpawn());
     }
@@ -203,5 +206,6 @@ public class LevelManager : MonoBehaviour {
     public void RemoveManager() {
         enabled = false;
         Destroy(levelHolder.gameObject);
+        Destroy(effectsHolder.gameObject);
     }
 }

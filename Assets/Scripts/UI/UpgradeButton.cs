@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum UpgradeType { Purchase, Damage, Speed, SpecialUnlock }
+public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUnlock, SpecialUpgrade }
+public enum SpecialUpgradeType { LightningBolt, LightningBoltDamage, FireDamage, FireSpeed }
 
 public class UpgradeButton : ScalingButton {
     public int eggType;
     public UpgradeType upgradeType;
+    public SpecialUpgradeType specialUpgradeType;
 
     protected override void Start() {
         SetState();
@@ -23,38 +25,43 @@ public class UpgradeButton : ScalingButton {
                 } else {
                     EnableButton();
                 }
-            } else if (upgradeType == UpgradeType.Damage) {
-                if (eggUnlocked) {
-                    EnableButton();
-                } else {
-                    DisableButton(false);
-                }
-            } else if (upgradeType == UpgradeType.Speed) {
-                if (eggUnlocked) {
-                    if (!IsMaxSpeed()) {
+            } else if (eggUnlocked) {
+                if (upgradeType == UpgradeType.SpecialUpgrade && specialUpgradeType == SpecialUpgradeType.LightningBoltDamage) {
+                    if (SaveSystem.GetBool("lightningEggBolt", false)) {
                         EnableButton();
                     } else {
-                        DisableButton(true);
+                        DisableButton(false, true);
                     }
+                } else if (upgradeType == UpgradeType.Damage ||
+                    (upgradeType == UpgradeType.Speed && !IsMaxSpeed()) ||
+                    (upgradeType == UpgradeType.EggAmount && !IsMaxEggs()) ||
+                    (upgradeType == UpgradeType.SpecialUpgrade && !IsMaxSpecialUpgrade())) {
+                    EnableButton();
                 } else {
-                    DisableButton(false);
+                    DisableButton(true);
                 }
+            } else {
+                DisableButton(false);
             }
         }
     }
 
-    private void DisableButton(bool purchased) {
+    private void DisableButton(bool purchased, bool needNewUnlock = false) {
         GetComponent<Image>().color = new Color32(125, 125, 125, 255);
-        if (purchased) {
-            Transform checkmark = transform.Find("CheckMark");
-            if (checkmark != null) {
-                checkmark.gameObject.SetActive(true);
-            }
+        Transform checkmark = transform.Find("CheckMark");
+        Transform lockImage = transform.Find("Lock");
+        bool showLock = false;
+        bool showCheck = false;
+        if (purchased && !needNewUnlock) {
+            showCheck = true;
         } else {
-            Transform lockImage = transform.Find("Lock");
-            if (lockImage != null) {
-                lockImage.gameObject.SetActive(true);
-            }
+            showLock = true;
+        }
+        if (checkmark != null) {
+            checkmark.gameObject.SetActive(showCheck);
+        }
+        if (lockImage != null) {
+            lockImage.gameObject.SetActive(showLock);
         }
         interactable = false;
         onClick.RemoveAllListeners();
@@ -91,6 +98,34 @@ public class UpgradeButton : ScalingButton {
         return false;
     }
 
+    private bool IsMaxEggs() {
+        switch (eggType) {
+            case 1:
+                return SaveSystem.GetInt("lightningEggAmount", 20) >= 250;
+            case 2:
+                return SaveSystem.GetInt("fireEggAmount", 15) >= 100;
+            case 3:
+                return SaveSystem.GetInt("energyEggAmount", 25) >= 175;
+            case 4:
+                return SaveSystem.GetInt("waterEggAmount", 15) >= 100;
+        }
+        return false;
+    }
+
+    private bool IsMaxSpecialUpgrade() {
+        switch (specialUpgradeType) {
+            case SpecialUpgradeType.LightningBolt:
+                return SaveSystem.GetBool("lightningEggBolt", false);
+            case SpecialUpgradeType.LightningBoltDamage:
+                return false;
+            case SpecialUpgradeType.FireDamage:
+                return false;
+            case SpecialUpgradeType.FireSpeed:
+                return SaveSystem.GetFloat("fireEggFireSpeed", 1f) <= 0.1f;
+        }
+        return false;
+    }
+
     void ButtonClicked() {
         if (upgradeType == UpgradeType.Purchase) {
             GameManager.instance.PurchaseEgg(eggType);
@@ -100,6 +135,16 @@ public class UpgradeButton : ScalingButton {
         } else if (upgradeType == UpgradeType.Speed) {
             GameManager.instance.IncreaseEggSpeed(eggType);
             if (IsMaxSpeed()) {
+                DisableButton(true);
+            }
+        } else if (upgradeType == UpgradeType.EggAmount) {
+            GameManager.instance.IncreaseEggAmount(eggType);
+            if (IsMaxEggs()) {
+                DisableButton(true);
+            }
+        } else if (upgradeType == UpgradeType.SpecialUpgrade) {
+            GameManager.instance.UpgradeSpecial(specialUpgradeType);
+            if (IsMaxSpecialUpgrade()) {
                 DisableButton(true);
             }
         }

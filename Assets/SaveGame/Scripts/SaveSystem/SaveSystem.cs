@@ -18,6 +18,10 @@ public static class SaveSystem {
 		}
 	}
 
+    public static void ClearAll() {
+        data = new DataState();
+    }
+
     public static bool IsLoaded() {
         return loaded;
     }

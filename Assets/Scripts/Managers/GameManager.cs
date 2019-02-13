@@ -148,4 +148,39 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+    public void IncreaseEggAmount(int eggType) {
+        switch (eggType) {
+            case 1:
+                SaveSystem.SetInt("lightningEggAmount", SaveSystem.GetInt("lightningEggAmount", 20) + 1);
+                break;
+            case 2:
+                SaveSystem.SetInt("fireEggAmount", SaveSystem.GetInt("fireEggAmount", 15) + 1);
+                break;
+            case 3:
+                SaveSystem.SetInt("energyEggAmount", SaveSystem.GetInt("energyEggAmount", 25) + 1);
+                break;
+            case 4:
+                SaveSystem.SetInt("waterEggAmount", SaveSystem.GetInt("waterEggAmount", 15) + 1);
+                break;
+        }
+    }
+
+    public void UpgradeSpecial(SpecialUpgradeType type) {
+        switch (type) {
+            case SpecialUpgradeType.LightningBolt:
+                SaveSystem.SetBool("lightningEggBolt", true);
+                uiManager.UpdateUpgradeScreenButtons();
+                break;
+            case SpecialUpgradeType.LightningBoltDamage:
+                SaveSystem.SetInt("lightningEggBoltDamage", SaveSystem.GetInt("lightningEggBoltDamage", 5) + 1);
+                break;
+            case SpecialUpgradeType.FireDamage:
+                SaveSystem.SetInt("fireEggFireDamage", SaveSystem.GetInt("fireEggFireDamage", 1) + 1);
+                break;
+            case SpecialUpgradeType.FireSpeed:
+                SaveSystem.SetFloat("fireEggFireSpeed", SaveSystem.GetFloat("fireEggFireSpeed", 1f) - 0.01f);
+                break;
+        }
+    }
 }

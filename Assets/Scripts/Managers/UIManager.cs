@@ -194,17 +194,7 @@ public class UIManager : MonoBehaviour {
         SaveSystem.SetInt("level", 1);
         GameManager.instance.purchasedEggs.Clear();
         GameManager.instance.purchasedEggs.Add(0);
-        SaveSystem.SetString("purchasedEggs", "0");
-        SaveSystem.SetInt("basicEggDamage", 2);
-        SaveSystem.SetInt("lightningEggDamage", 4);
-        SaveSystem.SetInt("fireEggDamage", 3);
-        SaveSystem.SetInt("energyEggDamage", 4);
-        SaveSystem.SetInt("waterEggDamage", 3);
-        SaveSystem.SetFloat("basicEggSpeed", 10f);
-        SaveSystem.SetFloat("lightningEggSpeed", 15f);
-        SaveSystem.SetFloat("fireEggSpeed", 10f) ;
-        SaveSystem.SetFloat("energyEggSpeed", 10f);
-        SaveSystem.SetFloat("waterEggSpeed", 10f);
+        SaveSystem.ClearAll();
         SetCurrentProgress();
     }
 
