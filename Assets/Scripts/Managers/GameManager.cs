@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UIManager uiManager;
     public GameObject playerReference;
+    public GameObject candyReference;
 
     [HideInInspector]
     public int lives = 3;
@@ -20,6 +23,13 @@ public class GameManager : MonoBehaviour
     public int level;
     [HideInInspector]
     public List<int> purchasedEggs;
+
+    [HideInInspector]
+    public int collectedCandy;
+    [HideInInspector]
+    public int totalCakes;
+    [HideInInspector]
+    public int totalCandy;
 
     [HideInInspector]
     public bool paused = false;
@@ -42,6 +52,7 @@ public class GameManager : MonoBehaviour
     public void InitGame() {
         Vector3 world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
         lives = 3;
+        collectedCandy = 0;
         levelManager.SetupLevel(level);
         player = Instantiate(playerReference, new Vector3(2.5f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
         playerScript = player.GetComponent<Player>();
@@ -65,6 +76,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         if (SaveSystem.IsLoaded()) {
             level = SaveSystem.GetInt("level", 1);
+            totalCakes = SaveSystem.GetInt("cakes", 0);
+            totalCandy = SaveSystem.GetInt("candy", 0);
             purchasedEggs = Utils.ToIntList(SaveSystem.GetString("purchasedEggs", "0"));
             StartCoroutine(uiManager.ToggleSplashScreen(false));
         } else {
@@ -76,6 +89,12 @@ public class GameManager : MonoBehaviour
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
         if (levelManager.CheckVictory()) {
+            totalCakes += lives;
+            totalCandy += collectedCandy;
+
+            SaveSystem.SetInt("cakes", totalCakes);
+            SaveSystem.SetInt("candy", totalCandy);
+
             ClearLevel();
             level++;
             SaveSystem.SetInt("level", level);
@@ -84,16 +103,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GiveCandy(int startHp) {
+        collectedCandy += Random.Range((int)Math.Floor((float)startHp / 2), startHp);
+    }
+
+
     public void CheckVictory() {
         StartCoroutine(WaitAndCheck());
     }
 
     public void GameOver() {
+        totalCandy += collectedCandy;
+        SaveSystem.SetInt("candy", totalCandy);
         ClearLevel();
         uiManager.ToggleGameOver(true);
     }
 
     public void ClearLevel() {
+
         enabled = false;
         levelManager.RemoveManager();
 

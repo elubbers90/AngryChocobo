@@ -9,7 +9,9 @@ public class Enemy : MovingObject {
 
     public GameObject fireEffect;
     public GameObject waterEffect;
-
+    
+    [HideInInspector]
+    public int startHp;
     [HideInInspector]
     public int currentHp;
     [HideInInspector]
@@ -39,6 +41,7 @@ public class Enemy : MovingObject {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
         base.Start();
         currentHp = baseHp * (int)Mathf.Ceil(GameManager.instance.level / 2f);
+        startHp = currentHp;
         speed = Random.Range(minSpeed, maxSpeed);
         SetVelocity();
 
@@ -72,7 +75,14 @@ public class Enemy : MovingObject {
     private IEnumerator WaitandRemove() {
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
+        SpawnCandy();
         RemoveEnemy();
+    }
+
+    private void SpawnCandy() {
+        Vector3 position = transform.position;
+        GameObject candy = Instantiate(GameManager.instance.candyReference, position, Quaternion.identity) as GameObject;
+        candy.transform.SetParent(GameManager.instance.levelManager.effectsHolder);
     }
 
     public virtual void TakeDamage() {
@@ -127,6 +137,7 @@ public class Enemy : MovingObject {
         gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
         gameObject.tag = "DeadEnemy";
         animator.SetTrigger("Die");
+        GameManager.instance.GiveCandy(startHp);
         StartCoroutine(WaitandRemove());
     }
 

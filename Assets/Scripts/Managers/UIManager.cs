@@ -13,17 +13,28 @@ public class UIManager : MonoBehaviour {
     public GameObject startGameButton;
     public GameObject upgradeButton;
 
+    public GameObject cakes;
+    public GameObject candy;
+    public GameObject totalCakes;
+    public GameObject totalCandy;
+
     public GameObject gameOverPopup;
     public GameObject gameOverText;
     public GameObject gameOverButton1;
     public GameObject gameOverButton2;
+    public GameObject gameOverCandy;
+    public GameObject gameOverCandyText;
 
     public GameObject pausePopup;
 
     public GameObject victoryPopup;
     public GameObject victoryText;
     public GameObject victoryButton;
-    
+    public GameObject victoryCakes;
+    public GameObject victoryCandy;
+    public GameObject victoryCakesText;
+    public GameObject victoryCandyText;
+
     public GameObject currentCakes;
     public GameObject gameOverlay;
 
@@ -47,26 +58,44 @@ public class UIManager : MonoBehaviour {
         startGameButton.SetActive(false);
         upgradeButton.SetActive(false);
         yield return new WaitForSeconds(1);
-        ToggleMainMenu(true, true);
+        ToggleMainMenu(true, true, true);
     }
 
     public void ToggleGameOver(bool show) {
         gameOverPopup.SetActive(show);
+        if (show) {
+            gameOverCandyText.GetComponent<Text>().text = "x " + GameManager.instance.collectedCandy;
+        }
         StartCoroutine(ScaleObject(show, gameOverButton1));
         StartCoroutine(ScaleObject(show, gameOverButton2));
         StartCoroutine(ScaleObject(show, gameOverText));
+        StartCoroutine(ScaleObject(show, gameOverCandy));
+        StartCoroutine(ScaleObject(show, gameOverCandyText));
     }
 
     public void ToggleVictory(bool show) {
         victoryPopup.SetActive(show);
+        if (show) {
+            victoryCakesText.GetComponent<Text>().text = GameManager.instance.lives + " x";
+            victoryCandyText.GetComponent<Text>().text = "x " + GameManager.instance.collectedCandy;
+        }
         StartCoroutine(ScaleObject(show, victoryText));
         StartCoroutine(ScaleObject(show, victoryButton));
+        StartCoroutine(ScaleObject(show, victoryCandyText));
+        StartCoroutine(ScaleObject(show, victoryCandy));
+        StartCoroutine(ScaleObject(show, victoryCakes));
+        StartCoroutine(ScaleObject(show, victoryCakesText));
     }
 
     public void TogglePause(bool show) {
         if (!GameManager.instance.paused) {
             StartCoroutine(ScaleObject(show, pausePopup, 1.5f));
         }
+    }
+
+    public void SetCurrentCurrency() {
+        totalCakes.GetComponent<Text>().text = "x " + GameManager.instance.totalCakes;
+        totalCandy.GetComponent<Text>().text = "x " + GameManager.instance.totalCandy;
     }
 
     private void SetCurrentProgress() {
@@ -117,9 +146,18 @@ public class UIManager : MonoBehaviour {
         text.text = month;
     }
 
-    public void ToggleMainMenu(bool show, bool visibleBackground) {
+    public void ToggleMainMenu(bool show, bool visibleBackground, bool modifyCurrency) {
         if (show) {
             SetCurrentProgress();
+        }
+        if (modifyCurrency) {
+            if (show) {
+                SetCurrentCurrency();
+            }
+            StartCoroutine(ScaleObject(show, cakes));
+            StartCoroutine(ScaleObject(show, candy));
+            StartCoroutine(ScaleObject(show, totalCandy));
+            StartCoroutine(ScaleObject(show, totalCakes));
         }
         StartCoroutine(ScaleObject(show, currentYear));
         StartCoroutine(ScaleObject(show, currentMonth));
@@ -129,7 +167,7 @@ public class UIManager : MonoBehaviour {
     }
 
     private IEnumerator ShowUpgradeScreen() {
-        ToggleMainMenu(false, true);
+        ToggleMainMenu(false, true, false);
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(true);
         foreach (Transform child in upgradeScreen.transform) {
@@ -145,7 +183,7 @@ public class UIManager : MonoBehaviour {
         }
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(false);
-        ToggleMainMenu(true, true);
+        ToggleMainMenu(true, true, false);
         SaveSystem.SaveToDisk();
     }
 
@@ -169,14 +207,14 @@ public class UIManager : MonoBehaviour {
 
     // click handlers
     public void StartMission() {
-        ToggleMainMenu(false, false);
+        ToggleMainMenu(false, false, true);
         ToggleGameOver(false);
         ToggleVictory(false);
         GameManager.instance.InitGame();
     }
 
     public void ToMainMenu() {
-        ToggleMainMenu(true, true);
+        ToggleMainMenu(true, true, true);
         ToggleGameOver(false);
         ToggleVictory(false);
     }
@@ -191,11 +229,14 @@ public class UIManager : MonoBehaviour {
 
     public void ResetGame() {
         GameManager.instance.level = 1;
-        SaveSystem.SetInt("level", 1);
+        GameManager.instance.totalCakes = 0;
+        GameManager.instance.totalCandy = 0;
         GameManager.instance.purchasedEggs.Clear();
         GameManager.instance.purchasedEggs.Add(0);
         SaveSystem.ClearAll();
+        SaveSystem.SaveToDisk();
         SetCurrentProgress();
+        SetCurrentCurrency();
     }
 
     public void Cheat() {
