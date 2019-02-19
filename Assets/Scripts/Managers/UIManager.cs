@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
+    [HideInInspector]
+    public UpgradeManager upgradeManager;
+
     public GameObject splashScreen;
     public GameObject loadingText;
 
@@ -47,6 +50,7 @@ public class UIManager : MonoBehaviour {
         mainMenu.SetActive(false);
         ToggleGameOverlay(false);
         upgradeScreen.SetActive(false);
+        upgradeManager = GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>();
     }
 
     public IEnumerator ToggleSplashScreen(bool show) {
@@ -171,15 +175,23 @@ public class UIManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(true);
         foreach (Transform child in upgradeScreen.transform) {
-            child.gameObject.SetActive(true);
-            StartCoroutine(ScaleObject(true, child.gameObject));
+            if (child.tag == "UpgradeTree") {
+                child.gameObject.SetActive(false);
+            } else {
+                child.gameObject.SetActive(true);
+                StartCoroutine(ScaleObject(true, child.gameObject));
+            }
         }
+        upgradeManager.OpenBasicEgg();
         UpdateUpgradeScreenButtons();
     }
 
     private IEnumerator HideUpgradeScreen() {
+        upgradeManager.CloseCurrentEgg();
         foreach (Transform child in upgradeScreen.transform) {
-            StartCoroutine(ScaleObject(false, child.gameObject));
+            if (child.tag != "UpgradeTree") {
+                StartCoroutine(ScaleObject(false, child.gameObject));
+            }
         }
         yield return new WaitForSeconds(0.5f);
         upgradeScreen.SetActive(false);

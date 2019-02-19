@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\OpenUpgradeButtonEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\UpgradeButtonEditor.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Workspace/AngryChocobo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

@@ -84,6 +84,8 @@
     <Compile Include="Assets\Scripts\Managers\Loader.cs" />
     <Compile Include="Assets\Scripts\Managers\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\UpgradeManager.cs" />
+    <Compile Include="Assets\Scripts\UI\OpenUpgradeButton.cs" />
     <Compile Include="Assets\Scripts\UI\ScalingButton.cs" />
     <Compile Include="Assets\Scripts\UI\UpgradeButton.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
