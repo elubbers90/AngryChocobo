@@ -208,6 +208,18 @@ public class GameManager : MonoBehaviour
             case SpecialUpgradeType.FireSpeed:
                 SaveSystem.SetFloat("fireEggFireSpeed", SaveSystem.GetFloat("fireEggFireSpeed", 1f) - 0.01f);
                 break;
+            case SpecialUpgradeType.EnergyRadius:
+                SaveSystem.SetFloat("energyEggRadius", SaveSystem.GetFloat("energyEggRadius", 1.5f) + 0.05f);
+                break;
+            case SpecialUpgradeType.EnergyDelay:
+                SaveSystem.SetFloat("energyEggDelay", SaveSystem.GetFloat("energyEggDelay", 1.5f) - 0.01f);
+                break;
+            case SpecialUpgradeType.WaterSlow:
+                SaveSystem.SetFloat("waterEggSlow", SaveSystem.GetFloat("waterEggSlow", 0.5f) - 0.01f);
+                break;
+            case SpecialUpgradeType.WaterRadius:
+                SaveSystem.SetFloat("waterEggRadius", SaveSystem.GetFloat("waterEggRadius", 1f) + 0.05f);
+                break;
         }
     }
 }

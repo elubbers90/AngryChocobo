@@ -5,9 +5,9 @@ using System;
 
 public class EnergyEgg : Egg {
     [HideInInspector]
-    public float teleportRange = 1.5f;
+    public float teleportRange;
     [HideInInspector]
-    public float teleportDelay = 0.1f;
+    public float teleportDelay;
 
     public GameObject DisappearAnimation;
     public GameObject AppearAnimation;
@@ -17,7 +17,8 @@ public class EnergyEgg : Egg {
     private float chosenY;
 
     protected override void Start() {
-        movingSpeed = 5;
+        teleportRange = SaveSystem.GetFloat("energyEggRadius", 1.5f);
+        teleportDelay = SaveSystem.GetFloat("energyEggDelay", 1.5f);
         base.Start();
 
         world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
@@ -54,7 +55,7 @@ public class EnergyEgg : Egg {
 
         if (enemy != 999) {
             chosenY = enemy;
-            StartCoroutine(StartBlink());
+            StartCoroutine(Disappear());
         } else {
             StartCoroutine(WaitAndTryAgain());
         }
@@ -66,19 +67,16 @@ public class EnergyEgg : Egg {
         SelectEnemy();
     }
 
-    private IEnumerator StartBlink() {
-        float waitTime = 0.05f;
-        yield return new WaitForSeconds(waitTime);
-        StartCoroutine(Disappear());
-    }
-
     private IEnumerator Disappear() {
+        yield return new WaitForSeconds(0.05f);
+
         DisappearAnimation.SetActive(true);
         float waitTime = 0.17f;
         yield return new WaitForSeconds(waitTime);
         rb2D.velocity = Vector2.zero;
         transform.position = new Vector3(transform.position.x, world.y * 2, transform.position.z);
         DisappearAnimation.SetActive(false);
+        yield return new WaitForSeconds(teleportDelay);
         Appear();
     }
 

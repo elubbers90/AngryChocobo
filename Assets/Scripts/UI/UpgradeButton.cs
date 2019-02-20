@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUnlock, SpecialUpgrade }
-public enum SpecialUpgradeType { LightningBolt, LightningBoltDamage, FireDamage, FireSpeed }
+public enum SpecialUpgradeType { LightningBolt, LightningBoltDamage, FireDamage, FireSpeed, EnergyRadius, EnergyDelay, WaterRadius, WaterSlow}
 
 public class UpgradeButton : ScalingButton {
     public int eggType;
@@ -122,6 +122,14 @@ public class UpgradeButton : ScalingButton {
                 return false;
             case SpecialUpgradeType.FireSpeed:
                 return SaveSystem.GetFloat("fireEggFireSpeed", 1f) <= 0.1f;
+            case SpecialUpgradeType.EnergyRadius:
+                return SaveSystem.GetFloat("energyEggRadius", 1.5f) >= 10f;
+            case SpecialUpgradeType.EnergyDelay:
+                return SaveSystem.GetFloat("energyEggDelay", 1.5f) <= 0f;
+            case SpecialUpgradeType.WaterSlow:
+                return SaveSystem.GetFloat("waterEggSlow", 0.5f) <= 0.1f;
+            case SpecialUpgradeType.WaterRadius:
+                return SaveSystem.GetFloat("waterEggRadius", 1f) >= 10f;
         }
         return false;
     }

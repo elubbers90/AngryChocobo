@@ -36,6 +36,8 @@ public class Enemy : MovingObject {
     private int slowIndex = 0;
     [HideInInspector]
     public float speedBefore;
+    [HideInInspector]
+    public bool GotHitByWater = false;
 
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
@@ -141,6 +143,15 @@ public class Enemy : MovingObject {
         StartCoroutine(WaitandRemove());
     }
 
+    public void WaterHit(int waterduration, float slowMultiplier) {
+        slowDuration = waterduration;
+        int sortingOrder = transform.Find("Body").gameObject.GetComponent<Renderer>().sortingOrder;
+        waterEffect.GetComponent<Renderer>().sortingOrder = sortingOrder + 1;
+        waterEffect.SetActive(true);
+
+        StartCoroutine(SetSlow(slowMultiplier));
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag.Contains("Egg") && currentHp - damageOverTimeTaken > 0) {
             if (collision.gameObject.tag == "Egg") {
@@ -164,15 +175,11 @@ public class Enemy : MovingObject {
                 EnergyEgg eggScript = collision.gameObject.GetComponent<EnergyEgg>();
                 currentHp -= eggScript.currentDamage;
             } else if (collision.gameObject.tag == "WaterEgg") {
+                GotHitByWater = true;
                 WaterEgg eggScript = collision.gameObject.GetComponent<WaterEgg>();
                 currentHp -= eggScript.currentDamage;
-                slowDuration = eggScript.waterduration;
 
-                int sortingOrder = transform.Find("Body").gameObject.GetComponent<Renderer>().sortingOrder;
-                waterEffect.GetComponent<Renderer>().sortingOrder = sortingOrder + 1;
-                waterEffect.SetActive(true);
-                
-                StartCoroutine(SetSlow(eggScript.slowMultiplier));
+                WaterHit(eggScript.waterduration, eggScript.slowMultiplier);
             }
 
 

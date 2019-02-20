@@ -204,8 +204,10 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void RemoveManager() {
-        enabled = false;
-        Destroy(levelHolder.gameObject);
-        Destroy(effectsHolder.gameObject);
+        if (enabled) {
+            enabled = false;
+            Destroy(levelHolder.gameObject);
+            Destroy(effectsHolder.gameObject);
+        }
     }
 }

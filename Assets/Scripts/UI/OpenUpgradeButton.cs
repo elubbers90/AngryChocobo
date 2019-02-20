@@ -34,7 +34,9 @@ public class OpenUpgradeButton : ScalingButton {
         interactable = true;
         onClick.RemoveAllListeners();
         onClick.AddListener(() => Open());
-        treeAnimator.SetTrigger("MoveOut");
+        if (treeAnimator != null && treeAnimator.isActiveAndEnabled) { 
+            treeAnimator.SetTrigger("MoveOut");
+        }
         StartCoroutine(WaitAndRemove());
     }
 
