@@ -17,7 +17,11 @@ public class OpenUpgradeButton : ScalingButton {
         if (eggType != 0) {
             EnableButton();
         } else {
-            Open();
+            GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            interactable = true;
+            onClick.RemoveAllListeners();
+            onClick.AddListener(() => Open());
+            upgradeTree.SetActive(false);
         }
     }
 
@@ -27,6 +31,7 @@ public class OpenUpgradeButton : ScalingButton {
         onClick.RemoveAllListeners();
         upgradeTree.SetActive(true);
         treeAnimator.SetTrigger("MoveIn");
+        GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
     }
 
     private void EnableButton() {
@@ -52,7 +57,9 @@ public class OpenUpgradeButton : ScalingButton {
     public void Open() {
         if (started) {
             DisableButton();
-            GameManager.instance.uiManager.upgradeManager.SetEggActive(this);
+            if (GameManager.instance.uiManager != null && GameManager.instance.uiManager.upgradeManager != null) {
+                GameManager.instance.uiManager.upgradeManager.SetEggActive(this);
+            }
         }
     }
 }

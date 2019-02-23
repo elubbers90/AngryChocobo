@@ -12,7 +12,18 @@ public class UpgradeButton : ScalingButton {
     public UpgradeType upgradeType;
     public SpecialUpgradeType specialUpgradeType;
 
+    private int cost;
+
+    private Transform checkmark;
+    private Transform lockImage;
+    private Transform candy;
+    private Transform candyAmount;
+
     protected override void Start() {
+        checkmark = transform.Find("CheckMark");
+        lockImage = transform.Find("Lock");
+        candy = transform.Find("Candy");
+        candyAmount = transform.Find("CandyAmount");
         SetState();
     }
 
@@ -48,8 +59,6 @@ public class UpgradeButton : ScalingButton {
 
     private void DisableButton(bool purchased, bool needNewUnlock = false) {
         GetComponent<Image>().color = new Color32(125, 125, 125, 255);
-        Transform checkmark = transform.Find("CheckMark");
-        Transform lockImage = transform.Find("Lock");
         bool showLock = false;
         bool showCheck = false;
         if (purchased && !needNewUnlock) {
@@ -57,27 +66,46 @@ public class UpgradeButton : ScalingButton {
         } else {
             showLock = true;
         }
-        if (checkmark != null) {
-            checkmark.gameObject.SetActive(showCheck);
-        }
         if (lockImage != null) {
             lockImage.gameObject.SetActive(showLock);
         }
+        if (checkmark != null) {
+            checkmark.gameObject.SetActive(showCheck);
+        }
+        if (candy != null) {
+            candy.gameObject.SetActive(false);
+        }
+        if (candyAmount != null) {
+            candyAmount.gameObject.SetActive(false);
+        }
+
         interactable = false;
         onClick.RemoveAllListeners();
     }
 
     private void EnableButton() {
+        cost = GameManager.instance.uiManager.upgradeManager.GetCost(eggType, upgradeType, specialUpgradeType);
         GetComponent<Image>().color = new Color32(255, 255, 255, 255);
-        Transform checkmark = transform.Find("CheckMark");
         if (checkmark != null) {
             checkmark.gameObject.SetActive(false);
         }
-        Transform lockImage = transform.Find("Lock");
         if (lockImage != null) {
             lockImage.gameObject.SetActive(false);
         }
+        if (candy != null) {
+            candy.gameObject.SetActive(true);
+        }
         interactable = true;
+        if (candyAmount != null) {
+            if (cost > GameManager.instance.totalCandy) {
+                candyAmount.GetComponent<Text>().color = new Color32(255, 0, 0, 255);
+                interactable = false;
+            } else {
+                candyAmount.GetComponent<Text>().color = new Color32(255, 255, 255, 255);
+            }
+            candyAmount.GetComponent<Text>().text = "x " + cost;
+            candyAmount.gameObject.SetActive(true);
+        }
         onClick.RemoveAllListeners();
         onClick.AddListener(() => ButtonClicked());
     }
@@ -135,26 +163,20 @@ public class UpgradeButton : ScalingButton {
     }
 
     void ButtonClicked() {
-        if (upgradeType == UpgradeType.Purchase) {
-            GameManager.instance.PurchaseEgg(eggType);
-            DisableButton(true);
-        } else if (upgradeType == UpgradeType.Damage) {
-            GameManager.instance.IncreaseEggDamage(eggType);
-        } else if (upgradeType == UpgradeType.Speed) {
-            GameManager.instance.IncreaseEggSpeed(eggType);
-            if (IsMaxSpeed()) {
-                DisableButton(true);
+        if (cost <= GameManager.instance.totalCandy) {
+            GameManager.instance.PayEggs(cost);
+            if (upgradeType == UpgradeType.Purchase) {
+                GameManager.instance.PurchaseEgg(eggType);
+            } else if (upgradeType == UpgradeType.Damage) {
+                GameManager.instance.IncreaseEggDamage(eggType);
+            } else if (upgradeType == UpgradeType.Speed) {
+                GameManager.instance.IncreaseEggSpeed(eggType);
+            } else if (upgradeType == UpgradeType.EggAmount) {
+                GameManager.instance.IncreaseEggAmount(eggType);
+            } else if (upgradeType == UpgradeType.SpecialUpgrade) {
+                GameManager.instance.UpgradeSpecial(specialUpgradeType);
             }
-        } else if (upgradeType == UpgradeType.EggAmount) {
-            GameManager.instance.IncreaseEggAmount(eggType);
-            if (IsMaxEggs()) {
-                DisableButton(true);
-            }
-        } else if (upgradeType == UpgradeType.SpecialUpgrade) {
-            GameManager.instance.UpgradeSpecial(specialUpgradeType);
-            if (IsMaxSpecialUpgrade()) {
-                DisableButton(true);
-            }
+            GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
         }
     }
 }

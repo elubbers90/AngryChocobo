@@ -130,10 +130,15 @@ public class GameManager : MonoBehaviour
 
 
     // Upgrades
+    public void PayEggs(int cost) {
+        totalCandy -= cost;
+        SaveSystem.SetInt("candy", totalCandy);
+        uiManager.SetCurrentCurrency();
+    }
+
     public void PurchaseEgg(int eggType) {
         purchasedEggs.Add(eggType);
         SaveSystem.SetString("purchasedEggs", Utils.IntListToString(purchasedEggs));
-        uiManager.UpdateUpgradeScreenButtons();
     }
 
     public void IncreaseEggDamage(int eggType) {
@@ -197,7 +202,6 @@ public class GameManager : MonoBehaviour
         switch (type) {
             case SpecialUpgradeType.LightningBolt:
                 SaveSystem.SetBool("lightningEggBolt", true);
-                uiManager.UpdateUpgradeScreenButtons();
                 break;
             case SpecialUpgradeType.LightningBoltDamage:
                 SaveSystem.SetInt("lightningEggBoltDamage", SaveSystem.GetInt("lightningEggBoltDamage", 5) + 1);

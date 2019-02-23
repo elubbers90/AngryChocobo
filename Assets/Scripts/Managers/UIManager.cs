@@ -182,8 +182,9 @@ public class UIManager : MonoBehaviour {
                 StartCoroutine(ScaleObject(true, child.gameObject));
             }
         }
-        upgradeManager.OpenBasicEgg();
+        yield return new WaitForSeconds(0.5f);
         UpdateUpgradeScreenButtons();
+        upgradeManager.OpenBasicEgg();
     }
 
     private IEnumerator HideUpgradeScreen() {
