@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUnlock, SpecialUpgrade }
+public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUpgrade }
 public enum SpecialUpgradeType { LightningBolt, LightningBoltDamage, FireDamage, FireSpeed, EnergyRadius, EnergyDelay, WaterRadius, WaterSlow}
 
 public class UpgradeButton : ScalingButton {
@@ -58,32 +58,37 @@ public class UpgradeButton : ScalingButton {
     }
 
     private void DisableButton(bool purchased, bool needNewUnlock = false) {
-        GetComponent<Image>().color = new Color32(125, 125, 125, 255);
-        bool showLock = false;
-        bool showCheck = false;
-        if (purchased && !needNewUnlock) {
-            showCheck = true;
+        if (upgradeType == UpgradeType.Purchase && purchased) {
+            gameObject.SetActive(false);
         } else {
-            showLock = true;
-        }
-        if (lockImage != null) {
-            lockImage.gameObject.SetActive(showLock);
-        }
-        if (checkmark != null) {
-            checkmark.gameObject.SetActive(showCheck);
-        }
-        if (candy != null) {
-            candy.gameObject.SetActive(false);
-        }
-        if (candyAmount != null) {
-            candyAmount.gameObject.SetActive(false);
-        }
+            GetComponent<Image>().color = new Color32(125, 125, 125, 255);
+            bool showLock = false;
+            bool showCheck = false;
+            if (purchased && !needNewUnlock) {
+                showCheck = true;
+            } else {
+                showLock = true;
+            }
+            if (lockImage != null) {
+                lockImage.gameObject.SetActive(showLock);
+            }
+            if (checkmark != null) {
+                checkmark.gameObject.SetActive(showCheck);
+            }
+            if (candy != null) {
+                candy.gameObject.SetActive(false);
+            }
+            if (candyAmount != null) {
+                candyAmount.gameObject.SetActive(false);
+            }
 
-        interactable = false;
-        onClick.RemoveAllListeners();
+            interactable = false;
+            onClick.RemoveAllListeners();
+        }
     }
 
     private void EnableButton() {
+        gameObject.SetActive(true);
         cost = GameManager.instance.uiManager.upgradeManager.GetCost(eggType, upgradeType, specialUpgradeType);
         GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         if (checkmark != null) {
@@ -97,7 +102,8 @@ public class UpgradeButton : ScalingButton {
         }
         interactable = true;
         if (candyAmount != null) {
-            if (cost > GameManager.instance.totalCandy) {
+            bool notAffordable = upgradeType == UpgradeType.Purchase ? cost > GameManager.instance.totalCakes : cost > GameManager.instance.totalCandy;
+            if (notAffordable) {
                 candyAmount.GetComponent<Text>().color = new Color32(255, 0, 0, 255);
                 interactable = false;
             } else {
@@ -163,18 +169,22 @@ public class UpgradeButton : ScalingButton {
     }
 
     void ButtonClicked() {
-        if (cost <= GameManager.instance.totalCandy) {
-            GameManager.instance.PayEggs(cost);
+        bool affordable = upgradeType == UpgradeType.Purchase ? cost <= GameManager.instance.totalCakes : cost <= GameManager.instance.totalCandy;
+        if (affordable) {
             if (upgradeType == UpgradeType.Purchase) {
+                GameManager.instance.PayCakes(cost);
                 GameManager.instance.PurchaseEgg(eggType);
-            } else if (upgradeType == UpgradeType.Damage) {
-                GameManager.instance.IncreaseEggDamage(eggType);
-            } else if (upgradeType == UpgradeType.Speed) {
-                GameManager.instance.IncreaseEggSpeed(eggType);
-            } else if (upgradeType == UpgradeType.EggAmount) {
-                GameManager.instance.IncreaseEggAmount(eggType);
-            } else if (upgradeType == UpgradeType.SpecialUpgrade) {
-                GameManager.instance.UpgradeSpecial(specialUpgradeType);
+            } else {
+                GameManager.instance.PayCandy(cost);
+                if (upgradeType == UpgradeType.Damage) {
+                    GameManager.instance.IncreaseEggDamage(eggType);
+                } else if (upgradeType == UpgradeType.Speed) {
+                    GameManager.instance.IncreaseEggSpeed(eggType);
+                } else if (upgradeType == UpgradeType.EggAmount) {
+                    GameManager.instance.IncreaseEggAmount(eggType);
+                } else if (upgradeType == UpgradeType.SpecialUpgrade) {
+                    GameManager.instance.UpgradeSpecial(specialUpgradeType);
+                }
             }
             GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
         }

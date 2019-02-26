@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool paused = false;
 
+    private int currentVictoryCheck = 0;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
         player = Instantiate(playerReference, new Vector3(2.5f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
         playerScript = player.GetComponent<Player>();
         uiManager.ToggleGameOverlay(true);
+        currentVictoryCheck = 0;
     }
 
     public void EnemyHit() {
@@ -86,9 +89,11 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator WaitAndCheck() {
+        currentVictoryCheck++;
+        int victoryCheck = currentVictoryCheck;
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
-        if (levelManager.CheckVictory()) {
+        if (victoryCheck == currentVictoryCheck && levelManager.CheckVictory()) {
             totalCakes += lives;
             totalCandy += collectedCandy;
 
@@ -104,7 +109,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GiveCandy(int startHp) {
-        collectedCandy += Random.Range((int)Math.Floor((float)startHp / 2), startHp);
+        collectedCandy += (int) (Random.Range((int)Math.Floor((float)startHp / 2), startHp) * Mathf.Ceil(level / 2f));
     }
 
 
@@ -130,9 +135,15 @@ public class GameManager : MonoBehaviour
 
 
     // Upgrades
-    public void PayEggs(int cost) {
+    public void PayCandy(int cost) {
         totalCandy -= cost;
         SaveSystem.SetInt("candy", totalCandy);
+        uiManager.SetCurrentCurrency();
+    }
+
+    public void PayCakes(int cost) {
+        totalCakes -= cost;
+        SaveSystem.SetInt("cakes", totalCakes);
         uiManager.SetCurrentCurrency();
     }
 

@@ -255,7 +255,12 @@ public class UIManager : MonoBehaviour {
     public void Cheat() {
         GameManager.instance.level++;
         SaveSystem.SetInt("level", GameManager.instance.level);
+        GameManager.instance.totalCandy += 1000000;
+        SaveSystem.SetInt("candy", GameManager.instance.totalCandy);
+        GameManager.instance.totalCakes += 1000;
+        SaveSystem.SetInt("cakes", GameManager.instance.totalCakes);
         SetCurrentProgress();
+        SetCurrentCurrency();
     }
 
     public void PauseGame() {
