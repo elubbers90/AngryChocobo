@@ -58,7 +58,7 @@ public class Enemy : MovingObject {
         }
     }
 
-    private void Update() {
+    public virtual void Update() {
         if (transform.position.x < (0 - wrld.x - half_x)) {
             GameManager.instance.EnemyHit();
             RemoveEnemy();

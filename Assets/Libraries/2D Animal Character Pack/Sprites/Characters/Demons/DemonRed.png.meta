@@ -1,0 +1,269 @@
+fileFormatVersion: 2
+guid: f85f5ab622bee4673ae2416f8ff8b988
+timeCreated: 1496081664
+licenseType: Store
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Head
+    21300002: Body
+    21300004: Leg1
+    21300006: Leg2
+    21300008: Arm2
+    21300010: Arm1
+    21300012: Tail
+    21300014: Face-idle
+    21300016: Face-attack
+    21300018: Face-hurt
+    21300020: Face-happy
+    21300022: Face-angry
+    21300024: Weapon1
+    21300026: Weapon2
+    21300028: Weapon3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Head
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 352
+        width: 431
+        height: 384
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05399974}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Body
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 148
+        width: 216
+        height: 193
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Leg1
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 51
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.4092639, y: 0.76}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Leg2
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 51
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5453677, y: 0.76}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Arm2
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 205
+        width: 103
+        height: 132
+      alignment: 9
+      pivot: {x: 0.23572044, y: 0.78354967}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Arm1
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 48
+        width: 104
+        height: 145
+      alignment: 9
+      pivot: {x: 0.8053612, y: 0.8207045}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Tail
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 44
+        width: 225
+        height: 148
+      alignment: 9
+      pivot: {x: 0.31852812, y: 0.47700918}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Face-idle
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 580
+        width: 275
+        height: 137
+      alignment: 9
+      pivot: {x: 0.13705611, y: 0.81}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Face-attack
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 406
+        width: 275
+        height: 144
+      alignment: 9
+      pivot: {x: 0.14118053, y: 0.82}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Face-hurt
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 234
+        width: 284
+        height: 147
+      alignment: 9
+      pivot: {x: 0.16852623, y: 0.79}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Face-happy
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 579
+        width: 283
+        height: 136
+      alignment: 9
+      pivot: {x: 0.16735494, y: 0.69323367}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Face-angry
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 379
+        width: 278
+        height: 179
+      alignment: 9
+      pivot: {x: 0.14505269, y: 0.5475409}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 515
+        width: 230
+        height: 230
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon2
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 274
+        width: 262
+        height: 229
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon3
+      rect:
+        serializedVersion: 2
+        x: 1252
+        y: 30
+        width: 291
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public bool paused = false;
 
     private int currentVictoryCheck = 0;
+    private bool gameEnded;
 
     void Awake() {
         if (instance == null) {
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<Player>();
         uiManager.ToggleGameOverlay(true);
         currentVictoryCheck = 0;
+        gameEnded = false;
     }
 
     public void EnemyHit() {
@@ -93,7 +95,8 @@ public class GameManager : MonoBehaviour
         int victoryCheck = currentVictoryCheck;
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
-        if (victoryCheck == currentVictoryCheck && levelManager.CheckVictory()) {
+        if (!gameEnded && victoryCheck == currentVictoryCheck && levelManager.CheckVictory()) {
+            gameEnded = true;
             totalCakes += lives;
             totalCandy += collectedCandy;
 
@@ -118,6 +121,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver() {
+        gameEnded = true;
+        currentVictoryCheck = 0;
+
         totalCandy += collectedCandy;
         SaveSystem.SetInt("candy", totalCandy);
         ClearLevel();

@@ -5,6 +5,8 @@ using System;
 using Random = UnityEngine.Random;
 using UnityEngine.Tilemaps;
 
+public enum LevelType { Default, CatBoss }
+
 public class LevelManager : MonoBehaviour {
     public TileBase[] edgeTiles;
     public TileBase[] topBorderTiles;
@@ -17,6 +19,7 @@ public class LevelManager : MonoBehaviour {
     private Tilemap foreground;
     private Tilemap treetops;
     public GameObject[] enemyReferences;
+    public GameObject[] bossReferences;
 
     public GameObject[] bunnyReferences;
     public List<GameObject> availableBunnies;
@@ -29,21 +32,54 @@ public class LevelManager : MonoBehaviour {
     private Vector3 world;
 
     private List<GameObject> enemies;
+    private List<GameObject> minions;
     private int enemyAmount;
     private int enemiesLeft;
     private int bunnySpawn;
+    private int currentMinion;
+    private bool bossDead;
+
+    private LevelType levelType;
+
+    private float x;
 
     public void Start() {
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         foreground = GameObject.Find("Foreground").GetComponent<Tilemap>();
         treetops = GameObject.Find("TreeTops").GetComponent<Tilemap>();
         world = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
+
+        x = world.x + 1f;
     }
 
     private IEnumerator WaitAndSpawn() {
         float waitTime = Random.Range(1f, 1.5f);
         yield return new WaitForSeconds(waitTime);
         SpawnEnemy();
+    }
+
+    private IEnumerator WaitAndSpawnMinion() {
+        float waitTime = Random.Range(1f, 1.5f);
+        yield return new WaitForSeconds(waitTime);
+
+        if (!bossDead) {
+            SpawnMinion();
+        }
+    }
+
+    private void SpawnMinion() {
+        if (enabled) {
+            currentMinion++;
+            GameObject toInstantiate;
+            if (availableBunnies.Count > 0 && bunnySpawn == currentMinion) {
+                toInstantiate = availableBunnies[Random.Range(0, availableBunnies.Count)];
+                bunnySpawn += Random.Range(15, 20);
+            } else {
+                toInstantiate = minions[Random.Range(0, minions.Count)];
+            }
+            SpawnObject(toInstantiate, 0.5f, 2f, 1);
+            StartCoroutine(WaitAndSpawnMinion());
+        }
     }
 
     private void SpawnEnemy() {
@@ -59,22 +95,30 @@ public class LevelManager : MonoBehaviour {
 
             }
 
-            float x = world.x + 1f;
-            float y = Random.Range((0 - world.y + 2f), (world.y - 2f));
-
-            GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-
-            SpriteRenderer[] renderers = instance.GetComponentsInChildren<SpriteRenderer>();
-            foreach(SpriteRenderer renderer in renderers){
-                renderer.sortingOrder = 10000 - (int)(y * 100);
-            }
-
-            instance.transform.SetParent(levelHolder);
-
-            if (enemiesLeft > 0) {
-                StartCoroutine(WaitAndSpawn());
+            if (levelType == LevelType.Default) {
+                SpawnObject(toInstantiate, 0.5f, 2f, 1);
+                if (enemiesLeft > 0) {
+                    StartCoroutine(WaitAndSpawn());
+                }
+            } else if (levelType == LevelType.CatBoss) {
+                SpawnObject(toInstantiate, 3f, 3f, 2);
+                currentMinion = 0;
+                StartCoroutine(WaitAndSpawnMinion());
             }
         }
+    }
+
+    private void SpawnObject(GameObject toInstantiate, float yOffset1, float yOffset2, int bossSortingOffset) {
+        float y = Random.Range((0 - world.y + yOffset1), (world.y - yOffset2));
+
+        GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+
+        SpriteRenderer[] renderers = instance.GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer renderer in renderers) {
+            renderer.sortingOrder = (10000 - (int)(y * 100)) * bossSortingOffset;
+        }
+
+        instance.transform.SetParent(levelHolder);
     }
 
     private void SpawnBackground(int level) {
@@ -165,17 +209,36 @@ public class LevelManager : MonoBehaviour {
         treetops.SetTile(new Vector3Int(tree4 + 4 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 4]);
     }
 
+    public void SetBossDead() {
+        bossDead = true;
+    }
+
     public void SetupLevel(int level) {
         SpawnBackground(level);
 
-        enemies = new List<GameObject>();
-        enemyAmount = Random.Range(40, 50);
+        if (level % 3 == 0) {
+            levelType = LevelType.CatBoss;
+            bossDead = false;
 
-        enemiesLeft = enemyAmount;
+            enemies = new List<GameObject>();
+            enemies.Add(bossReferences[0]);
+            enemiesLeft = enemyAmount = 1;
 
-        enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
-        enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
-        enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
+
+            minions = new List<GameObject>();
+            minions.Add(enemyReferences[6]);
+            minions.Add(enemyReferences[12]);
+        } else {
+            enemies = new List<GameObject>();
+            enemyAmount = Random.Range(40, 50);
+
+            enemiesLeft = enemyAmount;
+
+            enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
+            enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
+            enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
+            levelType = LevelType.Default;
+        }
 
         availableBunnies = new List<GameObject>();
         foreach(int bunny in GameManager.instance.purchasedEggs) {
