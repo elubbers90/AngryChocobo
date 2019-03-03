@@ -19,8 +19,10 @@ public class Player : MovingObject
     private float currentEggSpeed;
     [HideInInspector]
     public Animator animator;
+    private bool takingDamage = false;
 
     private int eggsToShoot;
+    private int currentDamageTrigger;
 
     protected override void Start() {
         Bounds bounds = GetComponent<Renderer>().bounds;
@@ -28,6 +30,7 @@ public class Player : MovingObject
         base.Start();
         animator = GetComponent<Animator>();
 
+        currentDamageTrigger = 0;
         selectedEggType = 0;
         currentEggSpeed = 0.45f - ((SaveSystem.GetFloat("basicEggSpeed", 10f) - 10f) / 50f);
         animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
@@ -113,7 +116,11 @@ public class Player : MovingObject
 
     private IEnumerator WaitAndSpawn() {
         yield return new WaitForSeconds(currentEggSpeed);
-        SpawnEgg();
+        if (takingDamage) {
+            StartCoroutine(WaitAndSpawn());
+        } else {
+            SpawnEgg();
+        }
     }
 
     private void SpawnEgg() {
@@ -135,4 +142,23 @@ public class Player : MovingObject
         SceneManager.LoadScene(0);
     }
 
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Yarn") {
+            StartCoroutine(TakeDamage());
+        }
+    }
+
+    private IEnumerator TakeDamage() {
+        currentDamageTrigger++;
+        int damageTrigger = currentDamageTrigger;
+        takingDamage = true;
+        animator.SetFloat("ShootingSpeed", 0);
+        animator.SetTrigger("TakeDamage");
+        GameManager.instance.EnemyHit();
+        yield return new WaitForSeconds(0.5f);
+        if (currentDamageTrigger == damageTrigger) {
+            takingDamage = false;
+            animator.SetFloat("ShootingSpeed", 1 / currentEggSpeed);
+        }
+    }
 }

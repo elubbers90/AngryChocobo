@@ -44,7 +44,6 @@ public class Egg : MovingObject {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        Debug.Log("Current damage: " + currentDamage);
         rb2D.velocity = Vector2.zero;
         gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
         animator.SetTrigger("Explode");

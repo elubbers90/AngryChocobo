@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\GameObjects\Eggs\LightningEgg.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Eggs\WaterEgg.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Boss\Boss.cs" />
+    <Compile Include="Assets\Scripts\GameObjects\Enemies\Boss\CatBoss.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Bunny.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\ChargingEnemy.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Dog.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\Scripts\GameObjects\Enemies\GrazingEnemy.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Sheep.cs" />
     <Compile Include="Assets\Scripts\GameObjects\MovingObject.cs" />
+    <Compile Include="Assets\Scripts\GameObjects\Objects\Yarn.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Player.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Managers\LevelManager.cs" />

@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     private IEnumerator WaitAndSpawnMinion() {
-        float waitTime = Random.Range(1f, 1.5f);
+        float waitTime = Random.Range(1.25f, 1.75f);
         yield return new WaitForSeconds(waitTime);
 
         if (!bossDead) {
@@ -221,7 +221,7 @@ public class LevelManager : MonoBehaviour {
             bossDead = false;
 
             enemies = new List<GameObject>();
-            enemies.Add(bossReferences[0]);
+            enemies.Add(bossReferences[2]);
             enemiesLeft = enemyAmount = 1;
 
 

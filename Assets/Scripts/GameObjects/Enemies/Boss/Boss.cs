@@ -11,11 +11,15 @@ public class Boss : Enemy {
     public GameObject faceHurt;
     public GameObject faceAttack;
 
+    public float attackSpeed;
+
     private GameObject currentFace;
 
     private float baseSpeed;
     private int currentStage;
     private float stopRange;
+
+    private bool attacking = false;
 
     private MovingDirection currentDirection = MovingDirection.Left;
 
@@ -31,6 +35,8 @@ public class Boss : Enemy {
         faceAngry.GetComponent<Renderer>().sortingOrder = sortingOrder;
         faceHurt.GetComponent<Renderer>().sortingOrder = sortingOrder;
         faceAttack.GetComponent<Renderer>().sortingOrder = sortingOrder;
+
+        StartCoroutine(WaitAndAttack());
     }
 
     public override void SetVelocity() {
@@ -73,21 +79,28 @@ public class Boss : Enemy {
     }
 
     private void SetBossFace() {
-        float newDamagePercentage = (float)(currentHp - damageOverTimeTaken) / (float)startHp;
+        if (attacking) {
+            currentFace.SetActive(false);
+            faceAttack.SetActive(true);
+        } else {
+            float newDamagePercentage = (float)(currentHp - damageOverTimeTaken) / (float)startHp;
 
-        if (newDamagePercentage < 0.5f) {
-            if (currentStage < 2) {
-                currentStage = 2;
-                currentFace.SetActive(false);
-                currentFace = faceAngry;
-                currentFace.SetActive(true);
-            }
-        } else if (newDamagePercentage < 0.75f) {
-            if (currentStage == 0) {
-                currentStage = 1;
-                currentFace.SetActive(false);
-                currentFace = faceIdle;
-                currentFace.SetActive(true);
+            if (newDamagePercentage < 0.5f) {
+                if (currentStage < 2) {
+                    currentStage = 2;
+                    currentFace.SetActive(false);
+                    currentFace = faceAngry;
+                    currentFace.SetActive(true);
+                }
+            } else if (newDamagePercentage < 0.75f) {
+                if (currentStage == 0) {
+                    currentStage = 1;
+                    currentFace.SetActive(false);
+                    currentFace = faceIdle;
+                    currentFace.SetActive(true);
+                }
+            } else {
+
             }
         }
     }
@@ -116,12 +129,33 @@ public class Boss : Enemy {
         yield return base.TakeDamageOverTime();
     }
 
-
-
     public override void Die() {
         currentFace.SetActive(false);
         faceHurt.SetActive(true);
         GameManager.instance.levelManager.SetBossDead();
         base.Die();
+    }
+
+    public IEnumerator WaitAndAttack() {
+        yield return new WaitForSeconds(attackSpeed);
+        if (currentHp > 0) {
+            rb2D.velocity = Vector2.zero;
+            attacking = true;
+            SetBossFace();
+            animator.SetTrigger("Attack");
+            StartCoroutine(DoAttack());
+            yield return new WaitForSeconds(0.5f);
+            attacking = false;
+            faceAttack.SetActive(false);
+            if (currentHp > 0) {
+                SetVelocity();
+                currentFace.SetActive(true);
+                StartCoroutine(WaitAndAttack());
+            }
+        }
+    }
+
+    public virtual IEnumerator DoAttack() {
+        yield return null;
     }
 }
