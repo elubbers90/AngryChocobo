@@ -5,7 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 using UnityEngine.Tilemaps;
 
-public enum LevelType { Default, CatBoss }
+public enum LevelType { Default, CatBoss, OwlBoss }
 
 public class LevelManager : MonoBehaviour {
     public TileBase[] edgeTiles;
@@ -67,6 +67,14 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    public  void SpawnExtraMinion() {
+        if (enabled) {
+            GameObject toInstantiate;
+            toInstantiate = minions[Random.Range(0, minions.Count)];
+            SpawnObject(toInstantiate, 0.5f, 2f, 1);
+        }
+    }
+
     private void SpawnMinion() {
         if (enabled) {
             currentMinion++;
@@ -100,7 +108,7 @@ public class LevelManager : MonoBehaviour {
                 if (enemiesLeft > 0) {
                     StartCoroutine(WaitAndSpawn());
                 }
-            } else if (levelType == LevelType.CatBoss) {
+            } else {
                 SpawnObject(toInstantiate, 3f, 3f, 2);
                 currentMinion = 0;
                 StartCoroutine(WaitAndSpawnMinion());
@@ -213,21 +221,41 @@ public class LevelManager : MonoBehaviour {
         bossDead = true;
     }
 
-    public void SetupLevel(int level) {
-        SpawnBackground(level);
+    private void SetupOwlBoss(int level) {
+        levelType = LevelType.OwlBoss;
+        
+        enemies.Add(bossReferences[level % 12 == 0 ? 4 : 3]);
+        enemiesLeft = enemyAmount = 1;
 
+
+        minions.Add(enemyReferences[5]);
+        minions.Add(enemyReferences[11]);
+    }
+
+    private void SetupCatBoss(int level) {
+        levelType = LevelType.CatBoss;
+
+        enemies.Add(bossReferences[level % 15 == 0 ? 2 : level % 9 == 0 ? 1 : 0]);
+        enemiesLeft = enemyAmount = 1;
+        
+        minions.Add(enemyReferences[6]);
+        minions.Add(enemyReferences[12]);
+    }
+
+    private void SetupBoss(int level) {
+        bossDead = false;
+        enemies = new List<GameObject>();
+        minions = new List<GameObject>();
+        if (level % 6 == 0) {
+            SetupCatBoss(level);
+        } else {
+            SetupOwlBoss(level);
+        }
+    }
+
+    private void SetupEnemies(int level) {
         if (level % 3 == 0) {
-            levelType = LevelType.CatBoss;
-            bossDead = false;
-
-            enemies = new List<GameObject>();
-            enemies.Add(bossReferences[2]);
-            enemiesLeft = enemyAmount = 1;
-
-
-            minions = new List<GameObject>();
-            minions.Add(enemyReferences[6]);
-            minions.Add(enemyReferences[12]);
+            SetupBoss(level);
         } else {
             enemies = new List<GameObject>();
             enemyAmount = Random.Range(40, 50);
@@ -239,15 +267,24 @@ public class LevelManager : MonoBehaviour {
             enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
             levelType = LevelType.Default;
         }
+    }
 
+    public void SetupBunnies() {
         availableBunnies = new List<GameObject>();
-        foreach(int bunny in GameManager.instance.purchasedEggs) {
+        foreach (int bunny in GameManager.instance.purchasedEggs) {
             if (bunny != 0 && bunny <= bunnyReferences.Length) {
                 availableBunnies.Add(bunnyReferences[bunny - 1]);
             }
         }
 
         bunnySpawn = Random.Range(5, 15);
+    }
+
+    public void SetupLevel(int level) {
+        SpawnBackground(level);
+
+        SetupEnemies(level);
+        SetupBunnies();
 
         enabled = true;
 

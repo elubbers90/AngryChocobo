@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\GameObjects\Eggs\WaterEgg.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Boss\Boss.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Boss\CatBoss.cs" />
+    <Compile Include="Assets\Scripts\GameObjects\Enemies\Boss\OwlBoss.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Bunny.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\ChargingEnemy.cs" />
     <Compile Include="Assets\Scripts\GameObjects\Enemies\Dog.cs" />
