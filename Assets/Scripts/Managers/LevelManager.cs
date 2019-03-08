@@ -5,7 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 using UnityEngine.Tilemaps;
 
-public enum LevelType { Default, CatBoss, OwlBoss }
+public enum LevelType { Default, CatBoss, OwlBoss, BearBoss, CowBoss }
 
 public class LevelManager : MonoBehaviour {
     public TileBase[] edgeTiles;
@@ -59,7 +59,15 @@ public class LevelManager : MonoBehaviour {
     }
 
     private IEnumerator WaitAndSpawnMinion() {
-        float waitTime = Random.Range(1.25f, 1.75f);
+        float waitTime;
+        if (levelType == LevelType.CatBoss || levelType == LevelType.OwlBoss) {
+            waitTime = Random.Range(1.25f, 1.75f);
+        } else if (levelType == LevelType.BearBoss) {
+            waitTime = Random.Range(3f, 4f);
+        } else {
+            waitTime = Random.Range(2.5f, 3.5f);
+        }
+
         yield return new WaitForSeconds(waitTime);
 
         if (!bossDead) {
@@ -232,12 +240,39 @@ public class LevelManager : MonoBehaviour {
         minions.Add(enemyReferences[11]);
     }
 
+    private void SetupCowBoss() {
+        levelType = LevelType.CowBoss;
+
+        enemies.Add(bossReferences[6]);
+        enemiesLeft = enemyAmount = 1;
+
+        minions.Add(enemyReferences[8]);
+        minions.Add(enemyReferences[8]);
+        minions.Add(enemyReferences[8]);
+        minions.Add(enemyReferences[8]);
+        minions.Add(enemyReferences[13]);
+    }
+
+    private void SetupBearBoss() {
+        levelType = LevelType.BearBoss;
+
+        enemies.Add(bossReferences[5]);
+        enemiesLeft = enemyAmount = 1;
+
+        minions.Add(enemyReferences[0]);
+        minions.Add(enemyReferences[3]);
+        minions.Add(enemyReferences[4]);
+        minions.Add(enemyReferences[7]);
+        minions.Add(enemyReferences[10]);
+        minions.Add(enemyReferences[14]);
+    }
+
     private void SetupCatBoss(int level) {
         levelType = LevelType.CatBoss;
 
         enemies.Add(bossReferences[level % 15 == 0 ? 2 : level % 9 == 0 ? 1 : 0]);
         enemiesLeft = enemyAmount = 1;
-        
+
         minions.Add(enemyReferences[6]);
         minions.Add(enemyReferences[12]);
     }
@@ -246,7 +281,11 @@ public class LevelManager : MonoBehaviour {
         bossDead = false;
         enemies = new List<GameObject>();
         minions = new List<GameObject>();
-        if (level % 6 == 0) {
+        if (level % 18 == 0) {
+            SetupCowBoss();
+        } else if (level % 9 == 0) {
+            SetupBearBoss();
+        } else if (level % 6 == 0) {
             SetupCatBoss(level);
         } else {
             SetupOwlBoss(level);

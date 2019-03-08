@@ -72,6 +72,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Vector3 GetPlayerPosition() {
+        return player.transform.position;
+    }
+
     public void ActivateEgg(int type) {
         playerScript.ActivateEgg(type);
     }

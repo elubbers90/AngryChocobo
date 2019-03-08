@@ -145,6 +145,8 @@ public class Player : MovingObject
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Yarn") {
             StartCoroutine(TakeDamage());
+        } else if (collision.gameObject.tag == "Honey") {
+            StartCoroutine(TakeDamage());
         }
     }
 
