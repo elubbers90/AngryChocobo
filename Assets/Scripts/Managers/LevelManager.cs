@@ -229,10 +229,10 @@ public class LevelManager : MonoBehaviour {
         bossDead = true;
     }
 
-    private void SetupOwlBoss(int level) {
+    private void SetupOwlBoss(int reference) {
         levelType = LevelType.OwlBoss;
         
-        enemies.Add(bossReferences[level % 12 == 0 ? 4 : 3]);
+        enemies.Add(bossReferences[reference]);
         enemiesLeft = enemyAmount = 1;
 
 
@@ -267,10 +267,10 @@ public class LevelManager : MonoBehaviour {
         minions.Add(enemyReferences[14]);
     }
 
-    private void SetupCatBoss(int level) {
+    private void SetupCatBoss(int reference) {
         levelType = LevelType.CatBoss;
 
-        enemies.Add(bossReferences[level % 15 == 0 ? 2 : level % 9 == 0 ? 1 : 0]);
+        enemies.Add(bossReferences[reference]);
         enemiesLeft = enemyAmount = 1;
 
         minions.Add(enemyReferences[6]);
@@ -281,14 +281,20 @@ public class LevelManager : MonoBehaviour {
         bossDead = false;
         enemies = new List<GameObject>();
         minions = new List<GameObject>();
-        if (level % 18 == 0) {
+        if (level % 21 == 0) {
+            SetupOwlBoss(4);
+        } else if (level % 18 == 0) {
+            SetupCatBoss(2);
+        } else if (level % 15 == 0) {
             SetupCowBoss();
+        } else if (level % 12 == 0) {
+            SetupCatBoss(1);
         } else if (level % 9 == 0) {
-            SetupBearBoss();
+            SetupOwlBoss(3);
         } else if (level % 6 == 0) {
-            SetupCatBoss(level);
+            SetupBearBoss();
         } else {
-            SetupOwlBoss(level);
+            SetupCatBoss(0);
         }
     }
 

@@ -137,7 +137,9 @@ public class Boss : Enemy {
     }
 
     public IEnumerator WaitAndAttack() {
-        yield return new WaitForSeconds(attackSpeed);
+        float slowAttack = 2f - ((slowMultiplier - 0.1f) / (0.9f));
+
+        yield return new WaitForSeconds(attackSpeed * slowAttack);
         if (currentHp > 0) {
             rb2D.velocity = Vector2.zero;
             attacking = true;
