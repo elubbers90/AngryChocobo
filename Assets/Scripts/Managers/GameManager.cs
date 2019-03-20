@@ -12,8 +12,11 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     [HideInInspector]
     public UIManager uiManager;
-    public GameObject playerReference;
+    public List<GameObject> playerReferences;
     public GameObject candyReference;
+
+    [HideInInspector]
+    public int currentSelectedPlayer;
 
     [HideInInspector]
     public int lives = 3;
@@ -57,7 +60,7 @@ public class GameManager : MonoBehaviour
         lives = 3;
         collectedCandy = 0;
         levelManager.SetupLevel(level);
-        player = Instantiate(playerReference, new Vector3(2.5f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
+        player = Instantiate(playerReferences[currentSelectedPlayer], new Vector3(2.5f - world.x, 0f, 0f), Quaternion.identity) as GameObject;
         playerScript = player.GetComponent<Player>();
         uiManager.ToggleGameOverlay(true);
         currentVictoryCheck = 0;
@@ -88,6 +91,9 @@ public class GameManager : MonoBehaviour
             totalCakes = SaveSystem.GetInt("cakes", 0);
             totalCandy = SaveSystem.GetInt("candy", 0);
             purchasedEggs = Utils.ToIntList(SaveSystem.GetString("purchasedEggs", "0"));
+            currentSelectedPlayer = SaveSystem.GetInt("currentPlayer", 0);
+            currentSelectedPlayer = 2;
+
             StartCoroutine(uiManager.ToggleSplashScreen(false));
         } else {
             StartCoroutine(WaitAndInit());

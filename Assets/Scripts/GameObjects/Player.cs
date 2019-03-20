@@ -14,6 +14,8 @@ public class Player : MovingObject
     public GameObject energyEffect;
     public GameObject waterEffect;
 
+    public float eggYOffset;
+
     [HideInInspector]
     public int selectedEggType = 0;
     private float currentEggSpeed;
@@ -25,7 +27,7 @@ public class Player : MovingObject
     private int currentDamageTrigger;
 
     protected override void Start() {
-        Bounds bounds = GetComponent<Renderer>().bounds;
+        Bounds bounds = transform.Find("Body").GetComponent<Renderer>().bounds;
         size = bounds.size;
         base.Start();
         animator = GetComponent<Animator>();
@@ -127,7 +129,7 @@ public class Player : MovingObject
         GameObject instance = Instantiate(eggTypes[selectedEggType], transform.position, Quaternion.identity) as GameObject;
 
         instance.transform.SetParent(transform);
-        instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - 0.1f, 0f);
+        instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - eggYOffset, 0f);
         instance.transform.localScale = new Vector3(2f, 2f, 1f);
 
         eggsToShoot--;

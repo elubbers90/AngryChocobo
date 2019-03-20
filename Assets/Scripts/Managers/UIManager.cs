@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour {
     public GameObject currentYear;
     public GameObject startGameButton;
     public GameObject upgradeButton;
+    public GameObject selectPlayerButton;
+    public List<GameObject> selectPlayers;
 
     public GameObject cakes;
     public GameObject candy;
@@ -61,6 +63,7 @@ public class UIManager : MonoBehaviour {
         currentYear.SetActive(false);
         startGameButton.SetActive(false);
         upgradeButton.SetActive(false);
+        selectPlayerButton.SetActive(false);
         yield return new WaitForSeconds(1);
         ToggleMainMenu(true, true, true);
     }
@@ -153,6 +156,11 @@ public class UIManager : MonoBehaviour {
     public void ToggleMainMenu(bool show, bool visibleBackground, bool modifyCurrency) {
         if (show) {
             SetCurrentProgress();
+            int i = 0;
+            foreach (GameObject player in selectPlayers) {
+                player.SetActive(i == GameManager.instance.currentSelectedPlayer);
+                i++;
+            }
         }
         if (modifyCurrency) {
             if (show) {
@@ -167,6 +175,9 @@ public class UIManager : MonoBehaviour {
         StartCoroutine(ScaleObject(show, currentMonth));
         StartCoroutine(ScaleObject(show, startGameButton));
         StartCoroutine(ScaleObject(show, upgradeButton));
+
+        StartCoroutine(ScaleObject(show, selectPlayerButton));
+        
         mainMenu.SetActive(show || visibleBackground);
     }
 
