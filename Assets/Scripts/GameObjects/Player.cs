@@ -15,6 +15,7 @@ public class Player : MovingObject
     public GameObject waterEffect;
 
     public float eggYOffset;
+    public float eggXOffset;
 
     [HideInInspector]
     public int selectedEggType = 0;
@@ -129,7 +130,7 @@ public class Player : MovingObject
         GameObject instance = Instantiate(eggTypes[selectedEggType], transform.position, Quaternion.identity) as GameObject;
 
         instance.transform.SetParent(transform);
-        instance.transform.position = new Vector3(instance.transform.position.x + 0.7f, instance.transform.position.y - eggYOffset, 0f);
+        instance.transform.position = new Vector3(instance.transform.position.x + eggXOffset, instance.transform.position.y - eggYOffset, 0f);
         instance.transform.localScale = new Vector3(2f, 2f, 1f);
 
         eggsToShoot--;

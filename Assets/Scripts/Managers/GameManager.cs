@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
             totalCandy = SaveSystem.GetInt("candy", 0);
             purchasedEggs = Utils.ToIntList(SaveSystem.GetString("purchasedEggs", "0"));
             currentSelectedPlayer = SaveSystem.GetInt("currentPlayer", 0);
-            currentSelectedPlayer = 5;
+            currentSelectedPlayer = 6;
 
             StartCoroutine(uiManager.ToggleSplashScreen(false));
         } else {
