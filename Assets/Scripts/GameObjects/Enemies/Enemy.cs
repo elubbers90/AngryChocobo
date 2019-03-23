@@ -42,7 +42,11 @@ public class Enemy : MovingObject {
     protected override void Start() {
         size = transform.Find("Body").gameObject.GetComponent<Renderer>().bounds.size;
         base.Start();
-        currentHp = baseHp * (int)Mathf.Ceil(GameManager.instance.level / 2f);
+        if (GameManager.instance.level == 0) {
+            currentHp = (int)Mathf.Ceil(baseHp / 2f);
+        } else {
+            currentHp = baseHp * (int)Mathf.Ceil(GameManager.instance.level / 2f);
+        }
         startHp = currentHp;
         speed = Random.Range(minSpeed, maxSpeed);
         SetVelocity();

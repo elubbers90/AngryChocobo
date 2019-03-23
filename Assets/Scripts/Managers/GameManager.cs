@@ -87,14 +87,13 @@ public class GameManager : MonoBehaviour
         float waitTime = 0.5f;
         yield return new WaitForSeconds(waitTime);
         if (SaveSystem.IsLoaded()) {
-            level = SaveSystem.GetInt("level", 1);
+            level = SaveSystem.GetInt("level", 0);
             totalCakes = SaveSystem.GetInt("cakes", 0);
             totalCandy = SaveSystem.GetInt("candy", 0);
             purchasedEggs = Utils.ToIntList(SaveSystem.GetString("purchasedEggs", "0"));
             currentSelectedPlayer = SaveSystem.GetInt("currentPlayer", 0);
-            currentSelectedPlayer = 6;
 
-            StartCoroutine(uiManager.ToggleSplashScreen(false));
+            StartCoroutine(uiManager.HideSplashScreen());
         } else {
             StartCoroutine(WaitAndInit());
         }
@@ -122,7 +121,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void GiveCandy(int startHp) {
-        collectedCandy += (int) (Random.Range((int)Math.Floor((float)startHp / 2), startHp) * Mathf.Ceil(level / 2f));
+        if (level == 0) {
+            collectedCandy += startHp;
+        } else {
+            collectedCandy += (int)(Random.Range((int)Math.Floor((float)startHp / 2), startHp) * Mathf.Ceil(level / 2f));
+        }
     }
 
 

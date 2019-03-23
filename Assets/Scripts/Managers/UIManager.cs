@@ -55,9 +55,9 @@ public class UIManager : MonoBehaviour {
         upgradeManager = GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>();
     }
 
-    public IEnumerator ToggleSplashScreen(bool show) {
-        StartCoroutine(FadeImage(show, splashScreen));
-        StartCoroutine(FadeText(show, loadingText));
+    public IEnumerator HideSplashScreen() {
+        StartCoroutine(FadeImage(false, splashScreen));
+        StartCoroutine(FadeText(false, loadingText));
         mainMenu.SetActive(true);
         currentMonth.SetActive(false);
         currentYear.SetActive(false);
@@ -65,7 +65,11 @@ public class UIManager : MonoBehaviour {
         upgradeButton.SetActive(false);
         selectPlayerButton.SetActive(false);
         yield return new WaitForSeconds(1);
-        ToggleMainMenu(true, true, true);
+        if (GameManager.instance.level == 0) {
+            StartMission();
+        } else {
+            ToggleMainMenu(true, true, true);
+        }
     }
 
     public void ToggleGameOver(bool show) {
@@ -252,7 +256,7 @@ public class UIManager : MonoBehaviour {
     }
 
     public void ResetGame() {
-        GameManager.instance.level = 1;
+        GameManager.instance.level = 0;
         GameManager.instance.totalCakes = 0;
         GameManager.instance.totalCandy = 0;
         GameManager.instance.purchasedEggs.Clear();

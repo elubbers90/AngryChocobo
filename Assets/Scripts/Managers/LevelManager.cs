@@ -54,6 +54,9 @@ public class LevelManager : MonoBehaviour {
 
     private IEnumerator WaitAndSpawn() {
         float waitTime = Random.Range(1f, 1.5f);
+        if (GameManager.instance.level == 0) {
+            waitTime = Random.Range(1.25f, 1.75f);
+        }
         yield return new WaitForSeconds(waitTime);
         SpawnEnemy();
     }
@@ -299,17 +302,25 @@ public class LevelManager : MonoBehaviour {
     }
 
     private void SetupEnemies(int level) {
-        if (level % 3 == 0) {
+        if (level % 3 == 0 && level != 0) {
             SetupBoss(level);
         } else {
             enemies = new List<GameObject>();
-            enemyAmount = Random.Range(40, 50);
+
+            if (level == 0) {
+                enemyAmount = Random.Range(30, 40);
+                enemies.Add(enemyReferences[0]);
+                enemies.Add(enemyReferences[12]);
+                enemies.Add(enemyReferences[14]);
+                enemies.Add(enemyReferences[15]);
+            } else {
+                enemyAmount = Random.Range(40, 50);
+                enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
+                enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
+                enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
+            }
 
             enemiesLeft = enemyAmount;
-
-            enemies.Add(GetEnemy(level, ((int)Math.Floor((decimal)level / 5)) % 3));
-            enemies.Add(GetEnemy(level, 3 + ((int)Math.Floor((decimal)level / 7)) % 4));
-            enemies.Add(GetEnemy(level, 6 + ((int)Math.Floor((decimal)level / 8)) % 5));
             levelType = LevelType.Default;
         }
     }
