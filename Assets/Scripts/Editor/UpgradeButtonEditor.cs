@@ -12,7 +12,11 @@ public class UpgradeButtonEditor : UnityEditor.UI.ButtonEditor {
             targetButton.specialUpgradeType = (SpecialUpgradeType)EditorGUILayout.EnumPopup("Special Upgrade Type", targetButton.specialUpgradeType);
         }
 
-        targetButton.eggType = EditorGUILayout.IntField("Egg Type", targetButton.eggType);
+        if (targetButton.upgradeType != UpgradeType.Chicken) {
+            targetButton.eggType = EditorGUILayout.IntField("Egg Type", targetButton.eggType);
+        } else {
+            targetButton.chicken = EditorGUILayout.IntField("Chicken", targetButton.chicken);
+        }
 
         base.OnInspectorGUI();
     }

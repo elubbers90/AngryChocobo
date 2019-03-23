@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class UpgradeManager : MonoBehaviour {
     private OpenUpgradeButton ActiveEgg;
     public GameObject BasicEgg;
+    public GameObject chickenTree;
+
+    private Animator chickenTreeAnimator;
 
     public void OpenBasicEgg() {
         BasicEgg.GetComponent<OpenUpgradeButton>().Open();
@@ -24,7 +27,7 @@ public class UpgradeManager : MonoBehaviour {
         }
     }
 
-    internal int GetCost(int eggType, UpgradeType upgradeType, SpecialUpgradeType specialUpgradeType) {
+    internal int GetCost(int eggType, UpgradeType upgradeType, SpecialUpgradeType specialUpgradeType, int chicken) {
         switch (upgradeType) {
             case UpgradeType.Purchase:
                 switch (GameManager.instance.purchasedEggs.Count) {
@@ -46,6 +49,23 @@ public class UpgradeManager : MonoBehaviour {
                 return GetAmountCost(eggType);
             case UpgradeType.SpecialUpgrade:
                 return GetSpecialCost(specialUpgradeType);
+            case UpgradeType.Chicken:
+                switch (chicken) {
+                    case 1:
+                        return 10;
+                    case 2:
+                        return 20;
+                    case 3:
+                        return 30;
+                    case 4:
+                        return 50;
+                    case 5:
+                        return 75;
+                    case 6:
+                        return 100;
+                    default:
+                        return 10;
+                }
         }
         return 0;
     }
@@ -118,4 +138,23 @@ public class UpgradeManager : MonoBehaviour {
         return 0;
     }
 
+    internal void OpenChickenScreen() {
+        if (chickenTreeAnimator == null) {
+            chickenTreeAnimator = chickenTree.GetComponent<Animator>();
+        }
+        chickenTree.SetActive(true);
+        chickenTreeAnimator.SetTrigger("MoveIn");
+    }
+
+    internal void CloseChickenScreen() {
+        if (chickenTreeAnimator != null && chickenTreeAnimator.isActiveAndEnabled) {
+            chickenTreeAnimator.SetTrigger("MoveOut");
+        }
+        StartCoroutine(WaitAndRemove());
+    }
+
+    private IEnumerator WaitAndRemove() {
+        yield return new WaitForSeconds(1f);
+        chickenTree.SetActive(false);
+    }
 }

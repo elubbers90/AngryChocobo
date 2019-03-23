@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUpgrade }
+public enum UpgradeType { Purchase, Damage, Speed, EggAmount, SpecialUpgrade, Chicken }
 public enum SpecialUpgradeType { LightningBolt, LightningBoltDamage, FireDamage, FireSpeed, EnergyRadius, EnergyDelay, WaterRadius, WaterSlow}
 
 public class UpgradeButton : ScalingButton {
     public int eggType;
+    public int chicken;
     public UpgradeType upgradeType;
     public SpecialUpgradeType specialUpgradeType;
 
@@ -29,30 +30,42 @@ public class UpgradeButton : ScalingButton {
 
     public void SetState() {
         if (SaveSystem.IsLoaded()) {
-            bool eggUnlocked = GameManager.instance.purchasedEggs.Contains(eggType);
-            if (upgradeType == UpgradeType.Purchase) {
-                if (eggUnlocked) {
-                    DisableButton(true);
-                } else {
-                    EnableButton();
-                }
-            } else if (eggUnlocked) {
-                if (upgradeType == UpgradeType.SpecialUpgrade && specialUpgradeType == SpecialUpgradeType.LightningBoltDamage) {
-                    if (SaveSystem.GetBool("lightningEggBolt", false)) {
-                        EnableButton();
+            if (upgradeType == UpgradeType.Chicken) {
+                if (GameManager.instance.purchasedPlayers.Contains(chicken)) {
+                    if (GameManager.instance.currentSelectedPlayer != chicken) {
+                        EnableSelectableButton();
                     } else {
-                        DisableButton(false, true);
+                        DisableButton(true);
                     }
-                } else if (upgradeType == UpgradeType.Damage ||
-                    (upgradeType == UpgradeType.Speed && !IsMaxSpeed()) ||
-                    (upgradeType == UpgradeType.EggAmount && !IsMaxEggs()) ||
-                    (upgradeType == UpgradeType.SpecialUpgrade && !IsMaxSpecialUpgrade())) {
-                    EnableButton();
                 } else {
-                    DisableButton(true);
+                    EnableButton();
                 }
             } else {
-                DisableButton(false);
+                bool eggUnlocked = GameManager.instance.purchasedEggs.Contains(eggType);
+                if (upgradeType == UpgradeType.Purchase) {
+                    if (eggUnlocked) {
+                        DisableButton(true);
+                    } else {
+                        EnableButton();
+                    }
+                } else if (eggUnlocked) {
+                    if (upgradeType == UpgradeType.SpecialUpgrade && specialUpgradeType == SpecialUpgradeType.LightningBoltDamage) {
+                        if (SaveSystem.GetBool("lightningEggBolt", false)) {
+                            EnableButton();
+                        } else {
+                            DisableButton(false, true);
+                        }
+                    } else if (upgradeType == UpgradeType.Damage ||
+                        (upgradeType == UpgradeType.Speed && !IsMaxSpeed()) ||
+                        (upgradeType == UpgradeType.EggAmount && !IsMaxEggs()) ||
+                        (upgradeType == UpgradeType.SpecialUpgrade && !IsMaxSpecialUpgrade())) {
+                        EnableButton();
+                    } else {
+                        DisableButton(true);
+                    }
+                } else {
+                    DisableButton(false);
+                }
             }
         }
     }
@@ -89,7 +102,7 @@ public class UpgradeButton : ScalingButton {
 
     private void EnableButton() {
         gameObject.SetActive(true);
-        cost = GameManager.instance.uiManager.upgradeManager.GetCost(eggType, upgradeType, specialUpgradeType);
+        cost = GameManager.instance.uiManager.upgradeManager.GetCost(eggType, upgradeType, specialUpgradeType, chicken);
         GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         if (checkmark != null) {
             checkmark.gameObject.SetActive(false);
@@ -102,7 +115,7 @@ public class UpgradeButton : ScalingButton {
         }
         interactable = true;
         if (candyAmount != null) {
-            bool notAffordable = upgradeType == UpgradeType.Purchase ? cost > GameManager.instance.totalCakes : cost > GameManager.instance.totalCandy;
+            bool notAffordable = (upgradeType == UpgradeType.Purchase || upgradeType == UpgradeType.Chicken) ? cost > GameManager.instance.totalCakes : cost > GameManager.instance.totalCandy;
             if (notAffordable) {
                 candyAmount.GetComponent<Text>().color = new Color32(255, 0, 0, 255);
                 interactable = false;
@@ -112,6 +125,26 @@ public class UpgradeButton : ScalingButton {
             candyAmount.GetComponent<Text>().text = "x " + cost;
             candyAmount.gameObject.SetActive(true);
         }
+        onClick.RemoveAllListeners();
+        onClick.AddListener(() => ButtonClicked());
+    }
+
+    private void EnableSelectableButton() {
+        gameObject.SetActive(true);
+        GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        if (checkmark != null) {
+            checkmark.gameObject.SetActive(false);
+        }
+        if (lockImage != null) {
+            lockImage.gameObject.SetActive(false);
+        }
+        if (candy != null) {
+            candy.gameObject.SetActive(false);
+        }
+        if (candyAmount != null) {
+            candyAmount.gameObject.SetActive(false);
+        }
+        interactable = true;
         onClick.RemoveAllListeners();
         onClick.AddListener(() => ButtonClicked());
     }
@@ -169,11 +202,16 @@ public class UpgradeButton : ScalingButton {
     }
 
     void ButtonClicked() {
-        bool affordable = upgradeType == UpgradeType.Purchase ? cost <= GameManager.instance.totalCakes : cost <= GameManager.instance.totalCandy;
+        bool affordable = (upgradeType == UpgradeType.Purchase || upgradeType == UpgradeType.Chicken) ? cost <= GameManager.instance.totalCakes : cost <= GameManager.instance.totalCandy;
         if (affordable) {
             if (upgradeType == UpgradeType.Purchase) {
                 GameManager.instance.PayCakes(cost);
                 GameManager.instance.PurchaseEgg(eggType);
+                GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
+            } else if(upgradeType == UpgradeType.Chicken) {
+                GameManager.instance.PayCakes(cost);
+                GameManager.instance.PurchaseOrSelectChicken(chicken);
+                GameManager.instance.uiManager.UpdateChickenScreenButtons();
             } else {
                 GameManager.instance.PayCandy(cost);
                 if (upgradeType == UpgradeType.Damage) {
@@ -185,8 +223,8 @@ public class UpgradeButton : ScalingButton {
                 } else if (upgradeType == UpgradeType.SpecialUpgrade) {
                     GameManager.instance.UpgradeSpecial(specialUpgradeType);
                 }
+                GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
             }
-            GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
         }
     }
 }

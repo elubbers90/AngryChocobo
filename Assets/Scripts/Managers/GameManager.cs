@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public int currentSelectedPlayer;
+    [HideInInspector]
+    public List<int> purchasedPlayers;
 
     [HideInInspector]
     public int lives = 3;
@@ -91,6 +93,7 @@ public class GameManager : MonoBehaviour
             totalCakes = SaveSystem.GetInt("cakes", 0);
             totalCandy = SaveSystem.GetInt("candy", 0);
             purchasedEggs = Utils.ToIntList(SaveSystem.GetString("purchasedEggs", "0"));
+            purchasedPlayers = Utils.ToIntList(SaveSystem.GetString("purchasedPlayers", "0"));
             currentSelectedPlayer = SaveSystem.GetInt("currentPlayer", 0);
 
             StartCoroutine(uiManager.HideSplashScreen());
@@ -255,5 +258,14 @@ public class GameManager : MonoBehaviour
                 SaveSystem.SetFloat("waterEggRadius", SaveSystem.GetFloat("waterEggRadius", 1f) + 0.05f);
                 break;
         }
+    }
+
+    public void PurchaseOrSelectChicken(int chicken) {
+        if (!purchasedPlayers.Contains(chicken)) {
+            purchasedPlayers.Add(chicken);
+            SaveSystem.SetString("purchasedPlayers", Utils.IntListToString(purchasedPlayers));
+        }
+        currentSelectedPlayer = chicken;
+        SaveSystem.SetInt("currentPlayer", currentSelectedPlayer);
     }
 }

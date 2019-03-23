@@ -45,6 +45,8 @@ public class UIManager : MonoBehaviour {
 
     public GameObject upgradeScreen;
 
+    public GameObject chickenScreen;
+
     public void Awake() {
         ToggleGameOver(false);
         ToggleVictory(false);
@@ -52,6 +54,7 @@ public class UIManager : MonoBehaviour {
         mainMenu.SetActive(false);
         ToggleGameOverlay(false);
         upgradeScreen.SetActive(false);
+        chickenScreen.SetActive(false);
         upgradeManager = GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>();
     }
 
@@ -215,6 +218,36 @@ public class UIManager : MonoBehaviour {
         SaveSystem.SaveToDisk();
     }
 
+    private IEnumerator ShowChickenScreen() {
+        ToggleMainMenu(false, true, false);
+        yield return new WaitForSeconds(0.5f);
+        chickenScreen.SetActive(true);
+        foreach (Transform child in chickenScreen.transform) {
+            if (child.tag == "UpgradeTree") {
+                child.gameObject.SetActive(false);
+            } else {
+                child.gameObject.SetActive(true);
+                StartCoroutine(ScaleObject(true, child.gameObject));
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        UpdateChickenScreenButtons();
+        upgradeManager.OpenChickenScreen();
+    }
+
+    private IEnumerator HideChickenScreen() {
+        upgradeManager.CloseChickenScreen();
+        foreach (Transform child in upgradeScreen.transform) {
+            if (child.tag != "UpgradeTree") {
+                StartCoroutine(ScaleObject(false, child.gameObject));
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        chickenScreen.SetActive(false);
+        ToggleMainMenu(true, true, false);
+        SaveSystem.SaveToDisk();
+    }
+
     public void ToggleGameOverlay(bool show) {
         if (show) {
             SetCurrentCakesText();
@@ -228,7 +261,14 @@ public class UIManager : MonoBehaviour {
 
     public void UpdateUpgradeScreenButtons() {
         UpgradeButton[] buttons = upgradeScreen.GetComponentsInChildren<UpgradeButton>();
-        foreach(UpgradeButton button in buttons) {
+        foreach (UpgradeButton button in buttons) {
+            button.SetState();
+        }
+    }
+
+    public void UpdateChickenScreenButtons() {
+        UpgradeButton[] buttons = chickenScreen.GetComponentsInChildren<UpgradeButton>();
+        foreach (UpgradeButton button in buttons) {
             button.SetState();
         }
     }
@@ -253,6 +293,14 @@ public class UIManager : MonoBehaviour {
 
     public void CloseUpgradeScreen() {
         StartCoroutine(HideUpgradeScreen());
+    }
+
+    public void ToChickenScreen() {
+        StartCoroutine(ShowChickenScreen());
+    }
+
+    public void CloseChickenScreen() {
+        StartCoroutine(HideChickenScreen());
     }
 
     public void ResetGame() {
