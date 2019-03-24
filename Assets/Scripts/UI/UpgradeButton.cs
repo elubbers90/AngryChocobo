@@ -209,8 +209,7 @@ public class UpgradeButton : ScalingButton {
                 GameManager.instance.PurchaseEgg(eggType);
                 GameManager.instance.uiManager.UpdateUpgradeScreenButtons();
             } else if(upgradeType == UpgradeType.Chicken) {
-                GameManager.instance.PayCakes(cost);
-                GameManager.instance.PurchaseOrSelectChicken(chicken);
+                GameManager.instance.PurchaseOrSelectChicken(chicken, cost);
                 GameManager.instance.uiManager.UpdateChickenScreenButtons();
             } else {
                 GameManager.instance.PayCandy(cost);

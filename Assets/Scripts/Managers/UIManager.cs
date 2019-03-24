@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour {
     public GameObject gameOverButton2;
     public GameObject gameOverCandy;
     public GameObject gameOverCandyText;
+    public GameObject gameOverTip;
 
     public GameObject pausePopup;
 
@@ -39,6 +40,7 @@ public class UIManager : MonoBehaviour {
     public GameObject victoryCandy;
     public GameObject victoryCakesText;
     public GameObject victoryCandyText;
+    public GameObject victoryTip;
 
     public GameObject currentCakes;
     public GameObject gameOverlay;
@@ -46,6 +48,8 @@ public class UIManager : MonoBehaviour {
     public GameObject upgradeScreen;
 
     public GameObject chickenScreen;
+
+    public List<string> tips;
 
     public void Awake() {
         ToggleGameOver(false);
@@ -79,12 +83,22 @@ public class UIManager : MonoBehaviour {
         gameOverPopup.SetActive(show);
         if (show) {
             gameOverCandyText.GetComponent<Text>().text = "x " + GameManager.instance.collectedCandy;
+            string tip = "";
+            if (GameManager.instance.level == 0 || GameManager.instance.level == 1) {
+                tip = tips[0];
+            } else if (GameManager.instance.level == 2) {
+                tip = tips[1];
+            } else {
+                tip = tips[Random.Range(0, tips.Count - 1)];
+            }
+            gameOverTip.GetComponent<Text>().text = tip;
         }
         StartCoroutine(ScaleObject(show, gameOverButton1));
         StartCoroutine(ScaleObject(show, gameOverButton2));
         StartCoroutine(ScaleObject(show, gameOverText));
         StartCoroutine(ScaleObject(show, gameOverCandy));
         StartCoroutine(ScaleObject(show, gameOverCandyText));
+        StartCoroutine(FadeText(show, gameOverTip));
     }
 
     public void ToggleVictory(bool show) {
@@ -92,6 +106,15 @@ public class UIManager : MonoBehaviour {
         if (show) {
             victoryCakesText.GetComponent<Text>().text = GameManager.instance.lives + " x";
             victoryCandyText.GetComponent<Text>().text = "x " + GameManager.instance.collectedCandy;
+            string tip = "";
+            if (GameManager.instance.level == 0 || GameManager.instance.level == 1) {
+                tip = tips[0];
+            } else if (GameManager.instance.level == 2) {
+                tip = tips[1];
+            } else {
+                tip = tips[Random.Range(0, tips.Count - 1)];
+            }
+            victoryTip.GetComponent<Text>().text = tip;
         }
         StartCoroutine(ScaleObject(show, victoryText));
         StartCoroutine(ScaleObject(show, victoryButton));
@@ -99,6 +122,7 @@ public class UIManager : MonoBehaviour {
         StartCoroutine(ScaleObject(show, victoryCandy));
         StartCoroutine(ScaleObject(show, victoryCakes));
         StartCoroutine(ScaleObject(show, victoryCakesText));
+        StartCoroutine(FadeText(show, victoryTip));
     }
 
     public void TogglePause(bool show) {
@@ -231,7 +255,6 @@ public class UIManager : MonoBehaviour {
             }
         }
         yield return new WaitForSeconds(0.5f);
-        UpdateChickenScreenButtons();
         upgradeManager.OpenChickenScreen();
     }
 

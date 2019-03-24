@@ -260,9 +260,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PurchaseOrSelectChicken(int chicken) {
+    public void PurchaseOrSelectChicken(int chicken, int cost) {
         if (!purchasedPlayers.Contains(chicken)) {
             purchasedPlayers.Add(chicken);
+            PayCakes(cost);
             SaveSystem.SetString("purchasedPlayers", Utils.IntListToString(purchasedPlayers));
         }
         currentSelectedPlayer = chicken;

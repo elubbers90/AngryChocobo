@@ -143,6 +143,10 @@ public class UpgradeManager : MonoBehaviour {
             chickenTreeAnimator = chickenTree.GetComponent<Animator>();
         }
         chickenTree.SetActive(true);
+        UpgradeButton[] buttons = chickenTree.GetComponentsInChildren<UpgradeButton>();
+        foreach (UpgradeButton button in buttons) {
+            button.SetState();
+        }
         chickenTreeAnimator.SetTrigger("MoveIn");
     }
 
