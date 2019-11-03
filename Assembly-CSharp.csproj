@@ -61,6 +61,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameServices\Scripts\Achievement.cs" />
+    <Compile Include="Assets\GameServices\Scripts\AchievementNames.cs" />
+    <Compile Include="Assets\GameServices\Scripts\AchievementsManager.cs" />
+    <Compile Include="Assets\GameServices\Scripts\GameServices.cs" />
+    <Compile Include="Assets\GameServices\Scripts\GameServicesSettings.cs" />
+    <Compile Include="Assets\GameServices\Scripts\Leaderboard.cs" />
+    <Compile Include="Assets\GameServices\Scripts\LeaderboardManager.cs" />
+    <Compile Include="Assets\GameServices\Scripts\LeaderboardNames.cs" />
+    <Compile Include="Assets\GameServices\Scripts\LogInManager.cs" />
+    <Compile Include="Assets\GameServices\Scripts\ScreenWriter.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\BoltSupport\GameServicesBoltSupport.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Login.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Logout.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\ShowAchievements.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\ShowLeaderboards.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\SubmitAchievement.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\SubmitScore.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\Login.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\Logout.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\ShowAchievementsUI.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\ShowAllLeaderboards.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\ShowLeaderboard.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\SubmitAchievement.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\PlaymakerSupport\SubmitScore.cs" />
     <Compile Include="Assets\Libraries\Animals Full Pack Sound FX\Scripts\AnimalSFX.cs" />
     <Compile Include="Assets\Libraries\Animals Full Pack Sound FX\Scripts\AnimalSFXAudioClips.cs" />
     <Compile Include="Assets\Libraries\Animals Full Pack Sound FX\Scripts\AnimalSFXPlayer.cs" />

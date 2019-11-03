@@ -61,6 +61,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameServices\Scripts\Editor\GameServicesSettingsWindow.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\LoginEditor.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\LogoutEditor.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\ShowAchievementsEditor.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\ShowLeaderboardsEditor.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\SubmitAchievementEditor.cs" />
+    <Compile Include="Assets\GameServices\Scripts\VisualScriptingSupport\GameFlowSupport\Editor\SubmitScoreEditor.cs" />
     <Compile Include="Assets\Libraries\Animals Full Pack Sound FX\Editor\AnimalSFXEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\OpenUpgradeButtonEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\UpgradeButtonEditor.cs" />
