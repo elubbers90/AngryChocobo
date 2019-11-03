@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
     private int currentVictoryCheck = 0;
     private bool gameEnded;
 
+    [HideInInspector]
+    public AudioSource musicSource;
+    public AudioClip mainMenuTheme;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -53,7 +57,7 @@ public class GameManager : MonoBehaviour
         
         levelManager = GetComponent<LevelManager>();
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-
+        musicSource = GameObject.Find("MusicSource").GetComponent<AudioSource>();
         StartCoroutine(WaitAndInit());
     }
 

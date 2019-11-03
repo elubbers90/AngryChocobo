@@ -139,6 +139,7 @@ public class Enemy : MovingObject {
     }
 
     public virtual void Die() {
+        GetComponent<AnimalSFX>().Play();
         rb2D.velocity = Vector2.zero;
         gameObject.layer = LayerMask.NameToLayer("NonBlockingLayer");
         gameObject.tag = "DeadEnemy";

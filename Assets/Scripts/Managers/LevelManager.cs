@@ -28,6 +28,7 @@ public class LevelManager : MonoBehaviour {
     public Transform levelHolder;
     [HideInInspector]
     public Transform effectsHolder;
+    public AudioClip[] LevelThemes;
 
     private Vector3 world;
 
@@ -228,6 +229,13 @@ public class LevelManager : MonoBehaviour {
         treetops.SetTile(new Vector3Int(tree4 + 4 - tree4Offset, bottom, 0), treeTiles[minBackgroundRange + 4]);
     }
 
+    private void SetupMusic(int level) {
+        int chosenIndex = ((int)Math.Floor((decimal)(level + 3) / 3)) % 4;
+        AudioClip chosen = LevelThemes[chosenIndex];
+        GameManager.instance.musicSource.clip = chosen;
+        GameManager.instance.musicSource.Play();
+    }
+
     public void SetBossDead() {
         bossDead = true;
     }
@@ -338,6 +346,7 @@ public class LevelManager : MonoBehaviour {
 
     public void SetupLevel(int level) {
         SpawnBackground(level);
+        SetupMusic(level);
 
         SetupEnemies(level);
         SetupBunnies();

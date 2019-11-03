@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour {
         if (GameManager.instance.level == 0) {
             StartMission();
         } else {
-            ToggleMainMenu(true, true, true);
+            ToMainMenu();
         }
     }
 
@@ -308,6 +308,8 @@ public class UIManager : MonoBehaviour {
         ToggleMainMenu(true, true, true);
         ToggleGameOver(false);
         ToggleVictory(false);
+        GameManager.instance.musicSource.clip = GameManager.instance.mainMenuTheme;
+        GameManager.instance.musicSource.Play();
     }
 
     public void ToUpgradeScreen() {
