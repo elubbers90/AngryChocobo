@@ -71,6 +71,7 @@
     <Compile Include="Assets\Libraries\Animals Full Pack Sound FX\Editor\AnimalSFXEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\OpenUpgradeButtonEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\UpgradeButtonEditor.cs" />
+    <None Include="Assets\PlayServicesResolver\Editor\play-services-resolver_v1.2.131.0.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Workspace/AngryChocobo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -337,6 +338,9 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:/Workspace/AngryChocobo/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.VersionHandler">
+      <HintPath>D:/Workspace/AngryChocobo/Assets/PlayServicesResolver/Editor/Google.VersionHandler.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/2.0-api/mscorlib.dll</HintPath>
